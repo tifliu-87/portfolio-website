@@ -1,0 +1,1171 @@
+/* ==============================================================================
+   Design tokens & motion language
+   One easing curve for the whole site; three duration tiers.
+   Colors are written by the theme engine (src/theme.ts) — the values here are
+   the default "Heather" stop so the first paint matches before JS runs.
+   ============================================================================== */
+
+:root {
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-micro: 200ms;  /* hover states, color swaps, underlines */
+  --dur-small: 420ms;  /* inline expansions, card hovers */
+  --dur-large: 750ms;  /* section transitions, theme shifts */
+
+  --font-serif: "Fraunces Variable", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --bg: hsl(276 28% 92%);
+  --surface: hsl(276 26% 88%);
+  --ink: hsl(274 34% 15%);
+  --ink-muted: hsl(274 12% 40%);
+  --accent: hsl(272 52% 46%);
+  --accent-soft: hsl(272 45% 85%);
+  --accent-ink: hsl(272 60% 97%);
+  --line: hsl(274 20% 80%);
+
+  --content-width: 1040px;
+  --hero-width: 880px;
+}
+
+/* ------------------------------------ Reset ----------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  hanging-punctuation: first last;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100dvh;
+}
+
+img,
+svg,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  font-weight: 560;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-radius: 999px;
+  text-decoration: none;
+  transition: top var(--dur-micro) var(--ease);
+}
+
+.skip-link:focus-visible {
+  top: 1rem;
+}
+
+/* ----------------------------------- Layout ------------------------------------ */
+
+.page {
+  max-width: var(--content-width);
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 5vw, 3rem);
+}
+
+main {
+  display: block;
+}
+
+.section {
+  padding-block: clamp(4rem, 10vh, 7.5rem);
+  scroll-margin-top: 5rem;
+}
+
+.section-head {
+  margin-bottom: clamp(1.75rem, 4vw, 3rem);
+  max-width: 40rem;
+}
+
+.kicker {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.section-head h2 {
+  font-size: clamp(1.9rem, 4vw, 2.75rem);
+}
+
+.section-head .lede {
+  margin-top: 0.85rem;
+  color: var(--ink-muted);
+  max-width: 34rem;
+}
+
+/* Scroll reveal: items get .rv and an inline --i for stagger. Section gains .in
+   once, then transitions run. Transform + opacity only — no layout motion. */
+.rv {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity var(--dur-large) var(--ease),
+    transform var(--dur-large) var(--ease);
+  transition-delay: calc(var(--i, 0) * 55ms);
+}
+
+.in .rv {
+  opacity: 1;
+  transform: none;
+}
+
+/* ----------------------------------- Header ------------------------------------ */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  /* Solid-ish bg instead of backdrop blur: blur on a sticky element repaints
+     every scrolled frame on low-end GPUs; this stays cheap. */
+  background: color-mix(in oklab, var(--bg) 94%, transparent);
+  border-bottom: 1px solid color-mix(in oklab, var(--line) 55%, transparent);
+}
+
+.site-header-inner {
+  max-width: var(--content-width);
+  margin-inline: auto;
+  padding: 0.9rem clamp(1.25rem, 5vw, 3rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.wordmark {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 560;
+  font-size: 1.15rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* ------------------------------- Audience tabs --------------------------------- */
+
+.tabs {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  gap: 0.15rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.2rem;
+  border-radius: 999px;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  padding: 0.42rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  transition: color var(--dur-micro) var(--ease);
+}
+
+.tab:hover {
+  color: var(--ink);
+}
+
+.tab[aria-selected="true"] {
+  color: var(--accent-ink);
+}
+
+.tab-pill {
+  position: absolute;
+  top: 0.2rem;
+  bottom: 0.2rem;
+  left: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  /* The pill glides & resizes; it's absolutely positioned so nothing reflows. */
+  transition:
+    transform var(--dur-small) var(--ease),
+    width var(--dur-small) var(--ease),
+    background-color var(--dur-micro) var(--ease);
+  will-change: transform, width;
+}
+
+/* ------------------------------------ Hero ------------------------------------- */
+
+.hero {
+  max-width: var(--hero-width);
+  padding-top: clamp(4.5rem, 14vh, 9rem);
+  padding-bottom: clamp(3rem, 8vh, 5rem);
+  min-height: 62vh;
+}
+
+.hero-line {
+  font-family: var(--font-serif);
+  font-size: clamp(1.9rem, 4.6vw, 3.4rem);
+  font-weight: 480;
+  line-height: 1.28;
+  letter-spacing: -0.012em;
+  text-wrap: pretty;
+}
+
+/* Staggered word-group entrance when the audience changes */
+.hero-seg {
+  display: inline;
+  opacity: 0;
+  animation: heroSegIn var(--dur-large) var(--ease) forwards;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+
+@keyframes heroSegIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Interactive phrases: underline + soft wash that blooms behind the words.
+   Explicitly not a tooltip — the reveal is the .unfold block below, in flow. */
+.phrase {
+  display: inline;
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--accent) 55%, transparent);
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.16em;
+  border-radius: 0.3em;
+  transition:
+    color var(--dur-micro) var(--ease),
+    text-decoration-color var(--dur-micro) var(--ease),
+    background-color var(--dur-micro) var(--ease);
+  /* Wash blooms via background-color (paint only, no layout) */
+  background-color: transparent;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding-inline: 0.08em;
+  margin-inline: -0.08em;
+}
+
+.phrase:hover,
+.phrase.on {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+  background-color: color-mix(in oklab, var(--accent-soft) 70%, transparent);
+}
+
+/* The unfold: grid-template-rows 0fr -> 1fr, pushing content smoothly. */
+.unfold {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-small) var(--ease);
+}
+
+.unfold.open {
+  grid-template-rows: 1fr;
+}
+
+.unfold-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.unfold-text {
+  padding-top: 1.1rem;
+  max-width: 38rem;
+  font-size: clamp(1.02rem, 1.6vw, 1.18rem);
+  line-height: 1.55;
+  color: var(--ink-muted);
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity var(--dur-small) var(--ease),
+    transform var(--dur-small) var(--ease);
+}
+
+.unfold.open .unfold-text {
+  opacity: 1;
+  transform: none;
+}
+
+.hero-sub {
+  margin-top: 2.2rem;
+  color: var(--ink-muted);
+  font-size: 1rem;
+  opacity: 0;
+  animation: heroSegIn var(--dur-large) var(--ease) forwards;
+  animation-delay: 320ms;
+}
+
+/* Machines tab: structured, monospace, deliberately plain */
+.machine-block {
+  font-family: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+  font-size: clamp(0.82rem, 1.6vw, 0.98rem);
+  line-height: 1.7;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: clamp(1.1rem, 3vw, 1.8rem);
+  overflow-x: auto;
+  white-space: pre;
+  color: var(--ink);
+  opacity: 0;
+  animation: heroSegIn var(--dur-large) var(--ease) forwards;
+}
+
+.machine-block .mk {
+  color: var(--accent);
+}
+
+/* --------------------------- Mouse-reveal interlude ---------------------------- */
+
+.interlude {
+  padding-block: clamp(2rem, 6vh, 4rem);
+}
+
+.reveal-panel {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  min-height: clamp(260px, 40vh, 360px);
+  display: grid;
+  cursor: crosshair;
+  /* Contain paints inside the rounded box */
+  contain: paint;
+}
+
+.reveal-under {
+  grid-area: 1 / 1;
+  display: grid;
+  place-items: center;
+  padding: clamp(1.5rem, 5vw, 3.5rem);
+  text-align: center;
+  background:
+    radial-gradient(90% 120% at 15% 10%, color-mix(in oklab, var(--accent) 42%, var(--bg)) 0%, transparent 55%),
+    radial-gradient(80% 110% at 85% 90%, color-mix(in oklab, var(--accent) 60%, var(--ink)) 0%, transparent 60%),
+    linear-gradient(150deg, color-mix(in oklab, var(--accent) 24%, var(--bg)), color-mix(in oklab, var(--accent) 46%, var(--bg)));
+}
+
+.reveal-under blockquote {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3.6vw, 2.4rem);
+  font-weight: 520;
+  line-height: 1.3;
+  max-width: 26ch;
+  color: var(--ink);
+}
+
+.reveal-under em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.reveal-canvas {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  transition: opacity 900ms var(--ease);
+}
+
+.reveal-panel.bared .reveal-canvas {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.reveal-hint {
+  position: absolute;
+  inset: auto 0 1.1rem 0;
+  text-align: center;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  pointer-events: none;
+  transition: opacity var(--dur-small) var(--ease);
+}
+
+.reveal-panel.touched .reveal-hint {
+  opacity: 0;
+}
+
+/* ---------------------------------- Projects ----------------------------------- */
+
+.project-group + .project-group {
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+}
+
+.group-head {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.4rem;
+}
+
+.group-head h3 {
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  font-weight: 560;
+}
+
+.group-head p {
+  color: var(--ink-muted);
+  font-size: 0.95rem;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: clamp(1rem, 2.5vw, 1.6rem);
+}
+
+.project-card {
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid color-mix(in oklab, var(--line) 70%, transparent);
+  overflow: hidden;
+  transition:
+    transform var(--dur-small) var(--ease),
+    border-color var(--dur-small) var(--ease),
+    background-color var(--dur-large) var(--ease);
+  will-change: transform;
+}
+
+@media (hover: hover) {
+  .project-card:hover {
+    transform: translateY(-5px) scale(1.008);
+    border-color: color-mix(in oklab, var(--accent) 40%, var(--line));
+  }
+}
+
+.project-card-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.cover {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Abstract themed gradient art; the inner layer parallaxes on mouse move. */
+.cover-art {
+  position: absolute;
+  inset: -8%;
+  background:
+    radial-gradient(
+      60% 75% at calc(var(--gx) * 1%) calc(var(--gy) * 1%),
+      color-mix(in oklab, var(--accent) 62%, var(--bg)) 0%,
+      transparent 62%
+    ),
+    radial-gradient(
+      70% 90% at calc(100% - var(--gx) * 1%) calc(100% - var(--gy) * 1%),
+      color-mix(in oklab, color-mix(in oklab, var(--accent) 42%, var(--ink)) 55%, transparent) 0%,
+      transparent 68%
+    ),
+    linear-gradient(
+      calc(var(--ga) * 1deg),
+      color-mix(in oklab, var(--accent) 20%, var(--bg)),
+      color-mix(in oklab, var(--accent) 52%, var(--bg))
+    );
+  transform: translate3d(calc(var(--mx, 0) * 7px), calc(var(--my, 0) * 7px), 0);
+  transition: transform var(--dur-micro) var(--ease);
+}
+
+.project-body {
+  padding: 1.1rem 1.25rem 1.25rem;
+}
+
+.project-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.project-body h4 {
+  font-family: var(--font-serif);
+  font-size: 1.28rem;
+  font-weight: 580;
+}
+
+.project-toggle-glyph {
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  color: var(--ink-muted);
+  display: inline-block;
+  transition: transform var(--dur-small) var(--ease), color var(--dur-micro) var(--ease);
+}
+
+.project-card.open .project-toggle-glyph {
+  transform: rotate(45deg);
+  color: var(--accent);
+}
+
+.project-body .tagline {
+  margin-top: 0.4rem;
+  color: var(--ink-muted);
+  font-size: 0.94rem;
+  line-height: 1.5;
+}
+
+/* Case-study skeleton unfolds in flow — same 0fr -> 1fr language as the hero. */
+.project-details {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-small) var(--ease);
+}
+
+.project-card.open .project-details {
+  grid-template-rows: 1fr;
+}
+
+.project-details-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.project-details dl {
+  padding: 0.9rem 1.25rem 1.25rem;
+  border-top: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+  display: grid;
+  gap: 0.7rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity var(--dur-small) var(--ease),
+    transform var(--dur-small) var(--ease);
+}
+
+.project-card.open .project-details dl {
+  opacity: 1;
+  transform: none;
+}
+
+.project-details dt {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.project-details dd {
+  font-size: 0.92rem;
+  color: var(--ink-muted);
+}
+
+/* ----------------------------------- Values ------------------------------------ */
+
+.values-list {
+  list-style: none;
+  padding: 0;
+  max-width: 46rem;
+}
+
+.values-list li {
+  padding-block: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.values-list li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.values-list h3 {
+  font-size: clamp(1.35rem, 2.6vw, 1.75rem);
+  font-weight: 540;
+}
+
+.values-list p {
+  margin-top: 0.45rem;
+  color: var(--ink-muted);
+  max-width: 38rem;
+}
+
+/* --------------------------------- Background ---------------------------------- */
+
+.timeline {
+  list-style: none;
+  padding: 0;
+  position: relative;
+  max-width: 44rem;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 0.32rem;
+  top: 0.6rem;
+  bottom: 0.6rem;
+  width: 1px;
+  background: var(--line);
+}
+
+.timeline li {
+  position: relative;
+  padding-left: 2.2rem;
+  padding-block: 1.1rem;
+}
+
+.timeline li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.55rem;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  transition: background-color var(--dur-micro) var(--ease);
+}
+
+.timeline li:hover::before {
+  background: var(--accent);
+}
+
+.timeline .period {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.timeline h3 {
+  font-size: 1.25rem;
+  margin-top: 0.2rem;
+}
+
+.timeline p {
+  margin-top: 0.35rem;
+  color: var(--ink-muted);
+  font-size: 0.95rem;
+}
+
+/* -------------------------------- Testimonials --------------------------------- */
+
+.quote-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.quote-card-wrap {
+  display: flex;
+}
+
+.quote-card-wrap .quote-card {
+  flex: 1;
+}
+
+.quote-card {
+  background: var(--surface);
+  border: 1px solid color-mix(in oklab, var(--line) 70%, transparent);
+  border-radius: 20px;
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  transition:
+    transform var(--dur-small) var(--ease),
+    border-color var(--dur-small) var(--ease);
+}
+
+@media (hover: hover) {
+  .quote-card:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in oklab, var(--accent) 35%, var(--line));
+  }
+}
+
+.quote-card blockquote {
+  font-family: var(--font-serif);
+  font-size: 1.08rem;
+  line-height: 1.5;
+  font-weight: 460;
+}
+
+.quote-card blockquote::before {
+  content: "“";
+  display: block;
+  font-size: 2.4rem;
+  line-height: 0.6;
+  color: var(--accent);
+  margin-bottom: 0.6rem;
+}
+
+.quote-card figcaption {
+  margin-top: auto;
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+}
+
+.quote-card figcaption strong {
+  display: block;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* ------------------------------------ About ------------------------------------ */
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: start;
+}
+
+@media (max-width: 720px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.about-grid p + p {
+  margin-top: 1rem;
+}
+
+.about-grid p {
+  color: var(--ink-muted);
+  max-width: 36rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+}
+
+.chips li {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 0.86rem;
+  color: var(--ink-muted);
+  transition:
+    border-color var(--dur-micro) var(--ease),
+    color var(--dur-micro) var(--ease),
+    background-color var(--dur-micro) var(--ease);
+}
+
+.chips li:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: color-mix(in oklab, var(--accent-soft) 50%, transparent);
+}
+
+/* ----------------------------------- Contact ----------------------------------- */
+
+.contact {
+  text-align: left;
+}
+
+.contact .big-line {
+  font-family: var(--font-serif);
+  font-size: clamp(1.7rem, 4vw, 2.6rem);
+  font-weight: 500;
+  max-width: 24ch;
+  line-height: 1.25;
+}
+
+.contact-actions {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.72rem 1.4rem;
+  border-radius: 999px;
+  font-weight: 550;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition:
+    transform var(--dur-micro) var(--ease),
+    background-color var(--dur-micro) var(--ease),
+    color var(--dur-micro) var(--ease),
+    border-color var(--dur-micro) var(--ease);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.btn-ghost {
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.site-footer {
+  padding-block: 2.5rem;
+  border-top: 1px solid var(--line);
+  margin-top: 2rem;
+  color: var(--ink-muted);
+  font-size: 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* ---------------------------------- Nav rail ----------------------------------- */
+
+.nav-rail {
+  position: fixed;
+  left: clamp(0.7rem, 2vw, 1.5rem);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 1180px) {
+  .nav-rail {
+    display: none;
+  }
+}
+
+.rail-track {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: 0.6rem 0.4rem;
+}
+
+/* scroll progress: a hairline behind the dots that fills top-to-bottom */
+.rail-progress {
+  position: absolute;
+  left: 50%;
+  top: 0.9rem;
+  bottom: 0.9rem;
+  width: 1px;
+  background: var(--line);
+  transform: translateX(-50%);
+}
+
+.rail-progress::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform-origin: top;
+  transform: scaleY(var(--progress, 0));
+}
+
+.rail-dot {
+  position: relative;
+  z-index: 1;
+  width: 0.6rem;
+  height: 0.6rem;
+  display: grid;
+  place-items: center;
+}
+
+.rail-dot::before {
+  content: "";
+  width: 0.34rem;
+  height: 0.34rem;
+  border-radius: 50%;
+  background: var(--ink-muted);
+  opacity: 0.55;
+  transition:
+    opacity var(--dur-micro) var(--ease),
+    transform var(--dur-micro) var(--ease),
+    background-color var(--dur-micro) var(--ease);
+}
+
+.rail-dot:hover::before {
+  opacity: 1;
+  transform: scale(1.5);
+}
+
+.rail-dot[aria-current="true"]::before {
+  background: var(--accent);
+  opacity: 1;
+  transform: scale(1.7);
+}
+
+/* label unfolds from the dot on hover — text itself, no tooltip chrome */
+.rail-label {
+  position: absolute;
+  left: 1.3rem;
+  top: 50%;
+  translate: 0 -50%;
+  font-size: 0.74rem;
+  font-weight: 550;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition:
+    opacity var(--dur-micro) var(--ease),
+    transform var(--dur-micro) var(--ease);
+  pointer-events: none;
+}
+
+.rail-dot:hover .rail-label,
+.rail-dot:focus-visible .rail-label {
+  opacity: 1;
+  transform: none;
+}
+
+/* --------------------------------- Theme slider -------------------------------- */
+
+.theme-slider {
+  position: fixed;
+  right: clamp(0.7rem, 2vw, 1.5rem);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.theme-slider .swatch-label {
+  writing-mode: vertical-rl;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  user-select: none;
+}
+
+.slider-track {
+  position: relative;
+  width: 1.6rem;
+  height: 190px;
+  border-radius: 999px;
+  cursor: grab;
+  touch-action: none;
+}
+
+.slider-track:active {
+  cursor: grabbing;
+}
+
+/* the visible rail: a soft gradient strip through the six stops */
+.slider-rail {
+  position: absolute;
+  left: 50%;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 5px;
+  border-radius: 999px;
+  transform: translateX(-50%);
+  /* static gradient approximating the stop colors; decorative only */
+  background: linear-gradient(
+    to bottom,
+    hsl(265 58% 72%),
+    hsl(332 42% 62%),
+    hsl(272 52% 55%),
+    hsl(254 60% 45%),
+    hsl(285 30% 16%),
+    hsl(340 46% 62%)
+  );
+  opacity: 0.85;
+}
+
+/* the live span the ticks & handle are positioned within (inset by rail padding) */
+.slider-span {
+  position: absolute;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  left: 0;
+  right: 0;
+}
+
+.slider-tick {
+  position: absolute;
+  left: 50%;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+}
+
+.slider-tick::before {
+  content: "";
+  width: 0.28rem;
+  height: 0.28rem;
+  border-radius: 50%;
+  background: var(--bg);
+  opacity: 0.9;
+  transition: transform var(--dur-micro) var(--ease);
+}
+
+.slider-tick:hover::before {
+  transform: scale(1.6);
+}
+
+.slider-handle {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-left: -0.575rem;
+  margin-top: -0.575rem;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg);
+  box-shadow: 0 1px 6px rgb(0 0 0 / 0.25);
+  pointer-events: none;
+  /* positioned via transform from JS every frame while dragging/settling */
+  will-change: transform;
+}
+
+/* Mobile variant: a compact row of swatches, bottom-right */
+.theme-swatches {
+  position: fixed;
+  right: 0.9rem;
+  bottom: 0.9rem;
+  z-index: 30;
+  display: flex;
+  gap: 0.45rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--surface) 88%, transparent);
+  border: 1px solid var(--line);
+}
+
+.theme-swatches button {
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  transition:
+    transform var(--dur-micro) var(--ease),
+    border-color var(--dur-micro) var(--ease);
+}
+
+.theme-swatches button[aria-pressed="true"] {
+  border-color: var(--ink);
+  transform: scale(1.15);
+}
+
+/* ------------------------------- Reduced motion -------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  /* Keep gentle opacity crossfades — motionless, but not jarringly instant. */
+  .rv,
+  .unfold-text,
+  .hero-seg,
+  .hero-sub,
+  .machine-block,
+  .reveal-canvas,
+  .project-details dl {
+    transition-property: opacity !important;
+    transition-duration: 180ms !important;
+    animation-duration: 180ms !important;
+    transform: none !important;
+  }
+}
