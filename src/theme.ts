@@ -1,11 +1,14 @@
 /**
  * Theme engine.
  *
- * Six hand-tuned stops in the purple family. The slider produces a continuous
- * value in [0, 5]; we interpolate every color channel between adjacent stops
- * and write the result to CSS custom properties on <html>. Everything on the
- * page derives its color from those variables, so a single write re-themes
- * the whole site with zero React re-renders.
+ * Six hand-tuned stops from rose through lavender to dark plum. The slider
+ * produces a continuous value in [0, 5]; we interpolate every color channel
+ * between adjacent stops and write the result to CSS custom properties on
+ * <html>. Everything on the page derives its color from those variables, so a
+ * single write re-themes the whole site with zero React re-renders.
+ *
+ * Light-mode backgrounds stay near-cream (high lightness, low saturation) so
+ * the shade reads as a subtle tint rather than a wall of color.
  */
 
 export type Hsl = readonly [h: number, s: number, l: number];
@@ -26,86 +29,86 @@ export interface ThemeStop {
 
 export const THEME_STOPS: ThemeStop[] = [
   {
-    id: "lavender",
-    name: "Soft lavender",
+    id: "rose",
+    name: "Rose",
     scheme: "light",
-    bg: [265, 50, 95],
-    surface: [265, 45, 91],
-    ink: [268, 32, 16],
-    inkMuted: [267, 14, 42],
-    accent: [265, 58, 48],
-    accentSoft: [265, 52, 87],
-    accentInk: [265, 60, 97],
-    line: [265, 26, 83],
+    bg: [347, 36, 96],
+    surface: [345, 30, 92],
+    ink: [340, 30, 16],
+    inkMuted: [340, 10, 40],
+    accent: [343, 42, 46],
+    accentSoft: [343, 35, 88],
+    accentInk: [343, 50, 97],
+    line: [343, 18, 84],
   },
   {
     id: "mauve",
     name: "Dusty mauve",
     scheme: "light",
-    bg: [330, 24, 92],
-    surface: [330, 22, 88],
-    ink: [330, 28, 17],
-    inkMuted: [330, 12, 42],
-    accent: [332, 42, 45],
-    accentSoft: [330, 36, 85],
-    accentInk: [330, 50, 97],
-    line: [330, 18, 80],
+    bg: [325, 28, 96],
+    surface: [325, 24, 92],
+    ink: [325, 26, 16],
+    inkMuted: [325, 10, 40],
+    accent: [327, 34, 48],
+    accentSoft: [326, 30, 88],
+    accentInk: [326, 45, 97],
+    line: [326, 15, 84],
+  },
+  {
+    id: "lavender",
+    name: "Soft lavender",
+    scheme: "light",
+    bg: [268, 25, 96],
+    surface: [268, 22, 92],
+    ink: [268, 26, 16],
+    inkMuted: [267, 10, 42],
+    accent: [266, 36, 54],
+    accentSoft: [266, 32, 89],
+    accentInk: [266, 45, 97],
+    line: [266, 14, 85],
   },
   {
     id: "heather",
     name: "Heather",
     scheme: "light",
-    bg: [276, 28, 92],
-    surface: [276, 26, 88],
-    ink: [274, 34, 15],
-    inkMuted: [274, 12, 40],
-    accent: [272, 52, 46],
-    accentSoft: [272, 45, 85],
-    accentInk: [272, 60, 97],
-    line: [274, 20, 80],
+    bg: [285, 20, 96],
+    surface: [285, 18, 92],
+    ink: [282, 24, 16],
+    inkMuted: [282, 9, 42],
+    accent: [283, 28, 50],
+    accentSoft: [283, 26, 88],
+    accentInk: [283, 40, 97],
+    line: [283, 12, 84],
   },
   {
-    id: "indigo",
-    name: "Violet indigo",
+    id: "dusk",
+    name: "Lavender dusk",
     scheme: "dark",
-    bg: [258, 30, 15],
-    surface: [258, 28, 19],
-    ink: [255, 40, 94],
-    inkMuted: [256, 18, 72],
-    accent: [254, 72, 76],
-    accentSoft: [256, 34, 28],
-    accentInk: [258, 40, 12],
-    line: [257, 20, 28],
+    bg: [262, 22, 14],
+    surface: [262, 20, 18],
+    ink: [260, 30, 93],
+    inkMuted: [260, 14, 70],
+    accent: [263, 45, 78],
+    accentSoft: [262, 26, 27],
+    accentInk: [262, 30, 12],
+    line: [261, 16, 26],
   },
   {
-    id: "aubergine",
-    name: "Aubergine",
+    id: "plum",
+    name: "Dark plum",
     scheme: "dark",
-    bg: [285, 26, 8],
-    surface: [285, 24, 12],
-    ink: [285, 24, 93],
-    inkMuted: [285, 12, 68],
-    accent: [288, 48, 74],
-    accentSoft: [286, 28, 20],
-    accentInk: [286, 30, 10],
-    line: [285, 16, 21],
-  },
-  {
-    id: "blush",
-    name: "Plum blush",
-    scheme: "light",
-    bg: [344, 34, 93],
-    surface: [342, 32, 89],
-    ink: [336, 34, 16],
-    inkMuted: [338, 14, 42],
-    accent: [340, 46, 46],
-    accentSoft: [341, 40, 86],
-    accentInk: [341, 50, 97],
-    line: [340, 22, 81],
+    bg: [335, 24, 10],
+    surface: [335, 22, 14],
+    ink: [335, 22, 93],
+    inkMuted: [335, 11, 68],
+    accent: [338, 45, 74],
+    accentSoft: [336, 26, 22],
+    accentInk: [336, 28, 10],
+    line: [336, 15, 22],
   },
 ];
 
-export const DEFAULT_THEME_INDEX = 2; // mid-tone purple on load
+export const DEFAULT_THEME_INDEX = 0; // rose on load
 export const MAX_THEME_VALUE = THEME_STOPS.length - 1;
 
 const TOKEN_KEYS = [
