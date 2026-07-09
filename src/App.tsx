@@ -1,37 +1,55 @@
-import { useState } from "react";
-import type { AudienceId } from "./data";
-import { Header } from "./components/Header";
+import { useEffect, useMemo, useState } from "react";
+import { EMAIL, LINKEDIN_URL, NAME, PROJECTS } from "./data";
 import { Hero } from "./components/Hero";
 import { Projects } from "./components/Projects";
-import { RevealPanel } from "./components/RevealPanel";
-import { About, Background, Contact, Footer, Testimonials, Values } from "./components/Sections";
-import { NavRail } from "./components/NavRail";
+import { ProjectPage } from "./components/ProjectPage";
 import { ThemeSlider } from "./components/ThemeSlider";
+import { FontPicker } from "./components/FontPicker";
+
+/** Tiny hash router; works on any static host with zero config. */
+function useHashRoute(): string {
+  const [hash, setHash] = useState(() => window.location.hash);
+  useEffect(() => {
+    const onChange = () => {
+      setHash(window.location.hash);
+      window.scrollTo(0, 0);
+    };
+    window.addEventListener("hashchange", onChange);
+    return () => window.removeEventListener("hashchange", onChange);
+  }, []);
+  return hash;
+}
 
 export default function App() {
-  const [audience, setAudience] = useState<AudienceId>("everyone");
+  const hash = useHashRoute();
+  const project = useMemo(() => {
+    const m = hash.match(/^#\/work\/([\w-]+)/);
+    return m ? PROJECTS.find((p) => p.id === m[1]) : undefined;
+  }, [hash]);
 
   return (
     <>
-      <a className="skip-link" href="#work">
-        Skip to work
-      </a>
-      <Header audience={audience} onAudienceChange={setAudience} />
       <div className="page">
-        <main>
-          <Hero audience={audience} />
-          <Projects />
-          <RevealPanel />
-          <Values />
-          <Background />
-          <Testimonials />
-          <About />
-          <Contact />
-        </main>
-        <Footer />
+        <main>{project ? <ProjectPage project={project} /> : (
+          <>
+            <Hero />
+            <Projects />
+          </>
+        )}</main>
+        <footer className="site-footer">
+          <span>
+            © {new Date().getFullYear()} {NAME}
+          </span>
+          <span className="footer-links">
+            <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+            <a href={LINKEDIN_URL} target="_blank" rel="noreferrer">
+              LinkedIn
+            </a>
+          </span>
+        </footer>
       </div>
-      <NavRail />
       <ThemeSlider />
+      <FontPicker />
     </>
   );
 }
