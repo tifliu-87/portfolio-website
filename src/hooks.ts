@@ -28,7 +28,7 @@ export function useIsNarrow(): boolean {
 }
 
 /**
- * One-shot in-view flag for scroll reveals. Once visible, stays visible —
+ * One-shot in-view flag for scroll reveals. Once visible, stays visible;
  * we never re-hide content, and the observer disconnects immediately.
  */
 export function useInViewOnce<T extends HTMLElement>(

@@ -13,7 +13,7 @@ const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v
  * Theme control. Desktop: a draggable vertical slider on the right rail with
  * an elastic settle on release (the one place a spring overshoot is intended).
  * Narrow screens: a simplified row of tappable swatches.
- * All animation runs imperatively via rAF — React re-renders only when the
+ * All animation runs imperatively via rAF; React re-renders only when the
  * discrete stop changes (for aria state).
  */
 export function ThemeSlider() {
