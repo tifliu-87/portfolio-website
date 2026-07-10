@@ -95,7 +95,7 @@ Explicitly rejects: slick corporate formality, trendy or flashy design, vague pr
 - **Purple progression:** Six carefully hand-tuned stops from rose through lavender to dark plum; the theme slider invites theme-hopping without jarring.
 - **Restrained + responsive:** Components look clean at rest; interactions are subtle but present, rewarding attention.
 - **Motion with intention:** One easing curve everywhere; three durations for different scales. Reduced-motion respected—opacity crossfades, not skipped.
-- **Playful details:** Hidden words, cursor-following veil, hover reveals—delightful surprises that don't distract from the content.
+- **Playful details:** Hidden words with a feathered cursor reveal, hover reveals, delightful surprises that don't distract from the content.
 - **Color as navigation:** Accent color highlights interactive elements and draws focus to what matters.
 
 ## 2. Colors
@@ -185,10 +185,11 @@ Flat-by-default keeps the portfolio calm and readable. Tonal shifts (background 
 - **Hover / Active:** Background blooms to accent-soft (color-mix(in oklab, var(--accent-soft) 75%, transparent); ~200ms). On hover or when .on class is present.
 - **Unfold (Grid Expansion):** Nested grid-template-rows 0fr → 1fr transition (~420ms). Text inside fades in with opacity + translateY simultaneously.
 
-**Hidden Words (Hero Field)**
-- **Style:** Mono, 0.78rem, scattered around the hero section. Invisible until cursor passes near. Blur(4px) + opacity 0 by default.
-- **Lit State:** opacity 0.7, filter: none. Stays lit for the rest of the session. Transition (~420ms) on both properties.
-- **Veil (Cursor-Following Circle):** 220px diameter, backdrop-filter: invert(0.9) hue-rotate(180deg) when active. Slides underneath the hero frame. This is the one CSS filter effect on the site; it's purposeful and iconic.
+**Hidden Words (Hero Line)**
+- **Placement:** One centered line ("good products aren't built, they're noticed") in the band between the hero frame and the work grid. Mono, 0.78rem, ink-colored. At rest a whisper: opacity 0.05, blur 3px.
+- **Feathered Reveal:** Each word carries a per-frame `--near` value (0..1) computed in JS from its distance to the smoothed cursor, with a smoothstep falloff to ~120px. Opacity rises to 0.9 and blur falls to 0 as the cursor nears, so sweeping the line reads as wiping it clear. No lens geometry, no backdrop-filter, no color inversion; ink, opacity, and blur are the only materials.
+- **Found State (.lit):** Once mostly uncovered a word settles to a steady opacity 0.35, sharp, for the rest of the session, still brightening when the cursor revisits.
+- **Degradation:** The line is not rendered on coarse pointers or under prefers-reduced-motion.
 
 ### Theme Controls
 

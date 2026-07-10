@@ -116,24 +116,18 @@ note: "Hello, fellow reader of structured text. The other five tabs
 /* --------------------------- Hidden words (hero reveal) ------------------------ */
 
 /**
- * Scattered around the hero frame: top band, side gutters, bottom band of the
- * hero section. Uniform size and angle; each word is invisible until the
- * cursor passes near it, then stays lit. Reads roughly left-to-right,
- * top-to-bottom: "good products aren't built, they're noticed."
+ * One quiet line sitting in the band between the hero and the work grid.
+ * Each word rests at a whisper of opacity, sharpens as the cursor nears,
+ * and settles to a quiet steady presence once found:
+ * "good products aren't built, they're noticed."
  */
-export interface HiddenWord {
-  text: string;
-  x: number; // % of hero section width
-  y: number; // % of hero section height
-}
-
-export const HIDDEN_WORDS: HiddenWord[] = [
-  { text: "good", x: 8, y: 6 },
-  { text: "products", x: 47, y: 4 },
-  { text: "aren't", x: 88, y: 7 },
-  { text: "built,", x: 3.5, y: 52 },
-  { text: "they're", x: 96, y: 55 },
-  { text: "noticed", x: 50, y: 96 },
+export const HIDDEN_WORDS: string[] = [
+  "good",
+  "products",
+  "aren't",
+  "built,",
+  "they're",
+  "noticed",
 ];
 
 /* ---------------------------------- Projects ---------------------------------- */

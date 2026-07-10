@@ -129,25 +129,8 @@ h3 {
   padding-top: clamp(2rem, 6vh, 3.5rem);
 }
 
-/* When the word field is active (fine pointer, motion OK), open gutters all
-   around the frame so the hidden words and veil have room on every side. */
-.hero.with-field {
-  padding: clamp(3.5rem, 9vh, 5.5rem) clamp(2.5rem, 6vw, 5rem);
-}
-
-/* Layer spanning the whole hero section, painted underneath the frame. Hosts
-   the hidden words and the invert veil; reads as empty space until the cursor
-   sweeps across it. */
-.hero-field {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
 .hero-frame {
   position: relative;
-  z-index: 3; /* above the veil, so the circle slides underneath the box */
   background: var(--bg);
   border-radius: 20px;
   padding: clamp(1.75rem, 4vw, 3.25rem);
@@ -354,60 +337,36 @@ h3 {
   color: var(--accent);
 }
 
-/* Hidden words are scattered around the hero frame on all four sides:
-   uniform size, uniform angle, quiet mono face, just placed in different
-   spots. Lit when the cursor passes near (the veil below does the color
-   reveal) and they stay lit afterwards. */
+/* One hidden line of words, centered in the band between the hero frame and
+   the work grid. Each word's --near (0..1, written per frame from Hero.tsx)
+   is its proximity to the cursor; opacity and sharpness rise with it,
+   feathered by the smoothstep falloff on the JS side. At rest a word is a
+   whisper. Once found (.lit) it settles to a low steady presence, still
+   brightening when the cursor revisits. */
 .hero-words {
-  position: absolute;
-  inset: 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  column-gap: 0.55em;
+  row-gap: 0.3em;
+  margin-top: clamp(3rem, 9vh, 5rem);
   pointer-events: none;
 }
 
 .hero-word {
-  position: absolute;
+  --near: 0;
   font-family: var(--font-mono);
   font-size: 0.78rem;
   letter-spacing: 0.02em;
   color: var(--ink);
   white-space: nowrap;
-  opacity: 0;
-  filter: blur(4px);
-  transform: translate(-50%, -50%);
-  transition:
-    opacity var(--dur-small) var(--ease),
-    filter var(--dur-small) var(--ease);
+  opacity: max(0.05, calc(var(--near) * 0.9));
+  filter: blur(calc((1 - var(--near)) * 3px));
 }
 
 .hero-word.lit {
-  opacity: 0.7;
+  opacity: max(0.35, calc(var(--near) * 0.9));
   filter: none;
-}
-
-/* Cursor-following circle that inverts everything behind it: the light theme
-   flips to its dark counterpart inside the lens (invert flips lightness,
-   hue-rotate(180deg) flips the hue back so the shade family survives). */
-.hero-veil {
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  left: 0;
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  pointer-events: none;
-  transform: translate3d(-9999px, -9999px, 0); /* offscreen until first pointer move */
-  backdrop-filter: invert(0) hue-rotate(0deg);
-  -webkit-backdrop-filter: invert(0) hue-rotate(0deg);
-  transition: backdrop-filter var(--dur-small) var(--ease), -webkit-backdrop-filter var(--dur-small) var(--ease);
-  will-change: transform;
-}
-
-.hero-veil.on {
-  /* 0.9 rather than a full invert so the flipped bg lands near the dark
-     theme's lightness instead of pure black. */
-  backdrop-filter: invert(0.9) hue-rotate(180deg);
-  -webkit-backdrop-filter: invert(0.9) hue-rotate(180deg);
 }
 
 /* ------------------------------------ Work ------------------------------------- */
@@ -759,9 +718,5 @@ h3 {
     animation-duration: 180ms !important;
     transform: none !important;
     filter: none !important;
-  }
-
-  .hero-word {
-    transform: translate(-50%, -50%) !important;
   }
 }

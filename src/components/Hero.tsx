@@ -16,12 +16,12 @@ import { useCoarsePointer, usePrefersReducedMotion } from "../hooks";
 
 /**
  * Hero: the framed content box (audience tabs + intro sentence on the left,
- * name / role / contact links on the right) sits inside open gutters, and a
- * "field" layer spanning the whole section hosts the cursor-following invert
- * veil plus hidden words scattered around the box on all four sides. Words
- * are invisible until the cursor passes near them, then stay lit (like
- * creativefellowship.google); the veil slides underneath the box. On touch
- * or reduced-motion the field is simply not rendered.
+ * name / role / contact links on the right), followed by one hidden line of
+ * words sitting in the band between the hero and the work grid. Each word
+ * rests at a whisper of opacity; as the cursor nears, a feathered falloff
+ * raises its opacity and sharpness, and once found it settles to a quiet
+ * steady presence for the rest of the visit. On touch or reduced-motion the
+ * line is simply not rendered.
  */
 export function Hero() {
   const [audience, setAudience] = useState<AudienceId>("everyone");
@@ -37,52 +37,78 @@ export function Hero() {
     return () => window.clearTimeout(closeTimer.current);
   }, [audience]);
 
-  // Cursor-following invert veil plus proximity reveal of the hidden words.
-  // Once a word is lit it stays lit for the rest of the visit.
+  // Feathered proximity reveal of the hidden words. Each word carries a
+  // per-frame --near value (0..1) computed from its distance to the smoothed
+  // cursor with a smoothstep falloff, so the reveal has a soft radial edge
+  // without any lens geometry. Once a word has been mostly uncovered it is
+  // marked .lit and keeps a low steady presence for the rest of the visit.
   useEffect(() => {
     const section = sectionRef.current;
     if (!section || coarse || reduced) return;
     const words = Array.from(section.querySelectorAll<HTMLElement>(".hero-word"));
-    const veil = section.querySelector<HTMLElement>(".hero-veil");
 
     let raf = 0;
     let animating = false;
     let hasPointer = false;
-    let litCount = 0;
+    let pointerIn = false;
     const cur = { x: 0, y: 0 };
     const target = { x: 0, y: 0 };
-    let centers: { el: HTMLElement; x: number; y: number }[] = [];
+    type Spot = { el: HTMLElement; x: number; y: number; near: number; lit: boolean };
+    let spots: Spot[] = [];
 
     const measure = () => {
       const sr = section.getBoundingClientRect();
-      centers = words.map((el) => {
+      spots = words.map((el, i) => {
         const r = el.getBoundingClientRect();
-        return { el, x: r.left - sr.left + r.width / 2, y: r.top - sr.top + r.height / 2 };
+        return {
+          el,
+          x: r.left - sr.left + r.width / 2,
+          y: r.top - sr.top + r.height / 2,
+          near: spots[i]?.near ?? 0,
+          lit: spots[i]?.lit ?? false,
+        };
       });
     };
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(section);
 
-    // Word reveal radius matches the veil radius, so lighting up reads as
-    // "the circle uncovered the text". Keep in sync with .hero-veil size.
-    const REVEAL_RADIUS = 110;
+    // Full reveal at the cursor, fading to nothing at REVEAL_RADIUS; a word
+    // counts as found once it has been mostly uncovered. Sized so a couple
+    // of neighboring words glow while the hovered one reads sharp.
+    const REVEAL_RADIUS = 120;
+    const FOUND_AT = 0.7;
     const tick = () => {
       cur.x += (target.x - cur.x) * 0.16;
       cur.y += (target.y - cur.y) * 0.16;
-      if (veil) veil.style.transform = `translate3d(${cur.x - REVEAL_RADIUS}px, ${cur.y - REVEAL_RADIUS}px, 0)`;
-      if (litCount < centers.length) {
-        for (const c of centers) {
-          if (Math.hypot(c.x - cur.x, c.y - cur.y) < REVEAL_RADIUS && !c.el.classList.contains("lit")) {
-            c.el.classList.add("lit");
-            litCount++;
-          }
+      let busy = Math.hypot(target.x - cur.x, target.y - cur.y) > 0.3;
+      for (const s of spots) {
+        const d = Math.hypot(s.x - cur.x, s.y - cur.y);
+        let t = pointerIn ? Math.max(0, 1 - d / REVEAL_RADIUS) : 0;
+        t = t * t * (3 - 2 * t);
+        s.near += (t - s.near) * 0.14;
+        if (Math.abs(t - s.near) > 0.004) {
+          busy = true;
+        } else {
+          s.near = t;
+        }
+        s.el.style.setProperty("--near", s.near.toFixed(3));
+        if (!s.lit && s.near > FOUND_AT) {
+          s.lit = true;
+          s.el.classList.add("lit");
         }
       }
-      if (Math.hypot(target.x - cur.x, target.y - cur.y) > 0.3) {
+      if (busy) {
         raf = requestAnimationFrame(tick);
       } else {
         animating = false;
+      }
+    };
+
+    const kick = () => {
+      if (!animating) {
+        animating = true;
+        raf = requestAnimationFrame(tick);
       }
     };
 
@@ -94,23 +120,20 @@ export function Hero() {
         hasPointer = true;
         cur.x = target.x;
         cur.y = target.y;
-        if (veil) veil.style.transform = `translate3d(${cur.x - REVEAL_RADIUS}px, ${cur.y - REVEAL_RADIUS}px, 0)`;
       }
-      if (!animating) {
-        animating = true;
-        raf = requestAnimationFrame(tick);
-      }
+      pointerIn = true;
+      kick();
     };
 
-    const onEnter = () => veil?.classList.add("on");
-    const onLeave = () => veil?.classList.remove("on");
+    const onLeave = () => {
+      pointerIn = false;
+      kick();
+    };
 
     section.addEventListener("pointermove", onMove);
-    section.addEventListener("pointerenter", onEnter);
     section.addEventListener("pointerleave", onLeave);
     return () => {
       section.removeEventListener("pointermove", onMove);
-      section.removeEventListener("pointerenter", onEnter);
       section.removeEventListener("pointerleave", onLeave);
       ro.disconnect();
       cancelAnimationFrame(raf);
@@ -135,23 +158,7 @@ export function Hero() {
   const fieldOn = !coarse && !reduced;
 
   return (
-    <section id="intro" className={`hero${fieldOn ? " with-field" : ""}`} ref={sectionRef}>
-      {/* Layer spanning the whole section, underneath the framed box: hidden
-          words + invert veil. Words stay invisible until the cursor reveals
-          them, then stay lit. */}
-      {fieldOn && (
-        <div className="hero-field" aria-hidden="true">
-          <div className="hero-words">
-            {HIDDEN_WORDS.map((w, i) => (
-              <span key={i} className="hero-word" style={{ left: `${w.x}%`, top: `${w.y}%` }}>
-                {w.text}
-              </span>
-            ))}
-          </div>
-          <div className="hero-veil" />
-        </div>
-      )}
-
+    <section id="intro" className="hero" ref={sectionRef}>
       <div className="hero-frame">
         <div className="hero-grid">
           <div className="hero-main">
@@ -264,6 +271,19 @@ export function Hero() {
           </div>
         </div>
       </div>
+
+      {/* One hidden line in the band below the frame: words rest at a whisper
+          of opacity until the cursor's feathered reveal finds them, after
+          which they stay quietly present. */}
+      {fieldOn && (
+        <p className="hero-words" aria-hidden="true">
+          {HIDDEN_WORDS.map((w, i) => (
+            <span key={i} className="hero-word">
+              {w}
+            </span>
+          ))}
+        </p>
+      )}
     </section>
   );
 }
