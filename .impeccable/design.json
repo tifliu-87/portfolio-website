@@ -1,0 +1,296 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-09T00:00:00Z",
+  "title": "Design System: PM Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "cream-bg": {
+        "role": "neutral",
+        "displayName": "Cream BG (Rose default)",
+        "canonical": "hsl(347 36% 96%)",
+        "tonalRamp": [
+          "hsl(347 36% 16%)",
+          "hsl(347 36% 28%)",
+          "hsl(347 36% 40%)",
+          "hsl(347 36% 52%)",
+          "hsl(347 36% 68%)",
+          "hsl(347 36% 84%)",
+          "hsl(347 36% 96%)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "canonical": "hsl(345 30% 92%)",
+        "tonalRamp": [
+          "hsl(345 30% 16%)",
+          "hsl(345 30% 28%)",
+          "hsl(345 30% 40%)",
+          "hsl(345 30% 52%)",
+          "hsl(345 30% 68%)",
+          "hsl(345 30% 84%)",
+          "hsl(345 30% 92%)"
+        ]
+      },
+      "ink-dark": {
+        "role": "neutral",
+        "displayName": "Ink Dark",
+        "canonical": "hsl(340 30% 16%)",
+        "tonalRamp": [
+          "hsl(340 30% 16%)",
+          "hsl(340 30% 24%)",
+          "hsl(340 30% 32%)",
+          "hsl(340 30% 44%)",
+          "hsl(340 30% 60%)",
+          "hsl(340 30% 76%)",
+          "hsl(340 30% 92%)"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Ink Muted",
+        "canonical": "hsl(340 10% 40%)",
+        "tonalRamp": [
+          "hsl(340 10% 20%)",
+          "hsl(340 10% 28%)",
+          "hsl(340 10% 36%)",
+          "hsl(340 10% 44%)",
+          "hsl(340 10% 56%)",
+          "hsl(340 10% 72%)",
+          "hsl(340 10% 88%)"
+        ]
+      },
+      "accent-rose": {
+        "role": "primary",
+        "displayName": "Accent Rose",
+        "canonical": "hsl(343 42% 46%)",
+        "tonalRamp": [
+          "hsl(343 42% 18%)",
+          "hsl(343 42% 26%)",
+          "hsl(343 42% 34%)",
+          "hsl(343 42% 42%)",
+          "hsl(343 42% 56%)",
+          "hsl(343 42% 72%)",
+          "hsl(343 42% 88%)"
+        ]
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Accent Soft",
+        "canonical": "hsl(343 35% 88%)",
+        "tonalRamp": [
+          "hsl(343 35% 28%)",
+          "hsl(343 35% 36%)",
+          "hsl(343 35% 44%)",
+          "hsl(343 35% 56%)",
+          "hsl(343 35% 72%)",
+          "hsl(343 35% 80%)",
+          "hsl(343 35% 88%)"
+        ]
+      },
+      "accent-light": {
+        "role": "primary",
+        "displayName": "Accent Light",
+        "canonical": "hsl(343 50% 97%)",
+        "tonalRamp": [
+          "hsl(343 50% 37%)",
+          "hsl(343 50% 45%)",
+          "hsl(343 50% 53%)",
+          "hsl(343 50% 65%)",
+          "hsl(343 50% 81%)",
+          "hsl(343 50% 89%)",
+          "hsl(343 50% 97%)"
+        ]
+      },
+      "line-subtle": {
+        "role": "neutral",
+        "displayName": "Line Subtle",
+        "canonical": "hsl(343 18% 84%)",
+        "tonalRamp": [
+          "hsl(343 18% 24%)",
+          "hsl(343 18% 32%)",
+          "hsl(343 18% 40%)",
+          "hsl(343 18% 52%)",
+          "hsl(343 18% 68%)",
+          "hsl(343 18% 76%)",
+          "hsl(343 18% 84%)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero name, primary identity. Fraunces with optical size tuning."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section titles, case study names. Large, confident serif."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text, max 30-34ch line length. Warm sans, comfortable reading."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Tabs, form labels, footer text. Small, often uppercase."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Hidden words, machines tab, code. Precise, quiet."
+      }
+    },
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The only easing curve on the site. Used everywhere."
+      },
+      {
+        "name": "dur-micro",
+        "value": "200ms",
+        "purpose": "Hover states, color swaps, instant feedback."
+      },
+      {
+        "name": "dur-small",
+        "value": "420ms",
+        "purpose": "Inline expansions, card hovers, unfolds."
+      },
+      {
+        "name": "dur-large",
+        "value": "750ms",
+        "purpose": "Section transitions, theme shifts, reveal animations."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "tablet",
+        "value": "760px",
+        "purpose": "Hero grid switches from 2-col to 1-col; tab layout changes."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Plain Text Link",
+      "kind": "button",
+      "refersTo": "link-text",
+      "description": "No chrome, color-based affordance. Accent-rose on hover.",
+      "html": "<a href=\"#\" class=\"ds-link\">Read case study</a>",
+      "css": ".ds-link { color: hsl(340 10% 40%); text-decoration: none; font-size: 0.9rem; line-height: 1.6; transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-link:hover { color: hsl(343 42% 46%); }"
+    },
+    {
+      "name": "Plain Text Tab",
+      "kind": "button",
+      "refersTo": "tab-plain",
+      "description": "Horizontal tab group, no pill. Active tab is accent-colored.",
+      "html": "<div class=\"ds-tabs\"><button aria-selected=\"true\">Everyone</button><button>Recruiters</button><button>Founders</button></div>",
+      "css": ".ds-tabs { display: flex; gap: 1.2rem; flex-wrap: wrap; margin-bottom: 1.5rem; } .ds-tabs button { font-size: 0.78rem; color: hsl(340 10% 40%); background: none; border: 0; padding: 0; cursor: pointer; transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-tabs button:hover { color: hsl(340 30% 16%); } .ds-tabs button[aria-selected=\"true\"] { color: hsl(343 42% 46%); }"
+    },
+    {
+      "name": "Work Card",
+      "kind": "card",
+      "refersTo": "card-work",
+      "description": "16/10 cover with tinted blend background. Lifts on hover.",
+      "html": "<a href=\"#\" class=\"ds-card\"><div class=\"ds-card-cover\"></div><div class=\"ds-card-title\">Mobility at scale</div><div class=\"ds-card-tagline\">Growing adoption in Angola</div></a>",
+      "css": ".ds-card { display: block; text-decoration: none; color: hsl(340 30% 16%); } .ds-card-cover { aspect-ratio: 16 / 10; border-radius: 12px; background: color-mix(in oklab, hsl(343 42% 46%) 30%, hsl(345 30% 92%)); transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1), background-color 750ms cubic-bezier(0.16, 1, 0.3, 1); } @media (hover: hover) { .ds-card:hover .ds-card-cover { transform: translateY(-4px); } .ds-card:hover .ds-card-title { color: hsl(343 42% 46%); } } .ds-card-title { margin-top: 0.8rem; font-family: '\"Fraunces Variable\", Georgia, serif'; font-weight: 600; letter-spacing: -0.005em; font-size: 0.95rem; transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-card-tagline { margin-top: 0.25rem; font-size: 0.78rem; color: hsl(340 10% 40%); line-height: 1.5; }"
+    },
+    {
+      "name": "Interactive Phrase (Hover Reveal)",
+      "kind": "button",
+      "refersTo": "button-plain-text",
+      "description": "Accent text that blooms with soft background on hover. Reveals hidden text below.",
+      "html": "<button class=\"ds-phrase\">turns messy problems into products</button>",
+      "css": ".ds-phrase { display: inline; font: inherit; letter-spacing: inherit; color: hsl(343 42% 46%); background-color: transparent; border: 0; padding: 0.08em 0.04em; border-radius: 0.22em; cursor: pointer; box-decoration-break: clone; transition: background-color 200ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-phrase:hover { background-color: color-mix(in oklab, hsl(343 35% 88%) 75%, transparent); }"
+    },
+    {
+      "name": "Hero Name & Role",
+      "kind": "custom",
+      "refersTo": "display",
+      "description": "Large display name in accent color, small muted role below.",
+      "html": "<div class=\"ds-hero-id\"><div class=\"ds-hero-name\">Tiffany Liu</div><div class=\"ds-hero-role\">Product Manager</div></div>",
+      "css": ".ds-hero-id { text-align: right; } .ds-hero-name { font-family: '\"Fraunces Variable\", Georgia, serif'; font-weight: 600; letter-spacing: -0.005em; font-size: clamp(1.05rem, 1.6vw, 1.35rem); line-height: 1.1; color: hsl(343 42% 46%); } .ds-hero-role { margin-top: 0.4rem; color: hsl(340 10% 40%); font-size: 0.78rem; }"
+    },
+    {
+      "name": "Footer Link",
+      "kind": "button",
+      "refersTo": "link-text-hover",
+      "description": "Small text link in footer. Muted by default, accent on hover.",
+      "html": "<a href=\"#\" class=\"ds-footer-link\">GitHub</a>",
+      "css": ".ds-footer-link { color: hsl(340 10% 40%); text-decoration: none; font-size: 0.75rem; transition: color 200ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-footer-link:hover { color: hsl(343 42% 46%); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Thoughtful Maker",
+    "overview": "This is the workspace of someone meticulous—where every detail is intentional and nothing is accidental. The design is a quiet collaborator: typography and color carry the narrative, motion is purposeful, and components are clean without chrome. The portfolio speaks through the work itself, not through decoration or showiness. Playfulness lives in the interactions, not the surface. Hover states, hidden reveals, and a theme system that invites exploration make the experience feel alive—but always in service of clarity, never at its expense.",
+    "keyCharacteristics": [
+      "Serif display + sans body typography hierarchy",
+      "Purple progression with six carefully hand-tuned theme stops",
+      "Restrained components with responsive interactions",
+      "Intentional motion with respect for reduced-motion preferences",
+      "Playful details (hidden words, cursor veil, hover reveals)",
+      "Color-driven navigation and focus"
+    ],
+    "rules": [
+      {
+        "name": "The One Accent Rule",
+        "body": "The primary accent appears on ≤10% of any screen. Its rarity is the point. Overuse drains it of power.",
+        "section": "colors"
+      },
+      {
+        "name": "The Theme Interpolation Rule",
+        "body": "All colors interpolate between theme stops via the theme engine. The frontend writes resolved theme values to CSS custom properties at runtime; nothing is baked.",
+        "section": "colors"
+      },
+      {
+        "name": "The Weight Consistency Rule",
+        "body": "Serif faces use weight 600 (Fraunces). Sans and mono remain at their default (Inter 400). No weight mixing within a family.",
+        "section": "typography"
+      },
+      {
+        "name": "The Baseline Rule",
+        "body": "All text aligns to a shared baseline grid (line-height 1.6 on body, 1.15 on display). This creates invisible scaffolding.",
+        "section": "typography"
+      },
+      {
+        "name": "The No-Overflow Rule",
+        "body": "Headings with large clamp() max values must be tested at every breakpoint. If text overflows its container, reduce the clamp max or rewrite the copy. The viewport is part of the design.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "No drop shadows on elements. Depth comes from tonal shifts and motion, not blur. The goal is clarity; shadow vocabulary clutters the interface.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Hover-Lift Rule",
+        "body": "Interactive elements (cards, phrases) respond to hover with a subtle translateY lift plus a color shift. No box-shadow; motion + color = feedback.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use Fraunces 600 for all headlines and display text. It conveys craft and authority.",
+      "Do keep accent color to ≤10% of any screen. Its rarity makes it powerful.",
+      "Do use muted gray for secondary copy; it reads as confident, not timid. Ensure 4.5:1 contrast.",
+      "Do animate via opacity and transform only (translate, scale, rotate). Never animate layout.",
+      "Do respect reduced-motion: provide opacity-only crossfades as the alternative to transforms.",
+      "Do use one easing curve everywhere: cubic-bezier(0.16, 1, 0.3, 1). No bounce, no elastic.",
+      "Do use three duration tiers: micro (200ms), small (420ms), large (750ms).",
+      "Do test all clamp() values at every breakpoint to catch heading overflow.",
+      "Do let the work speak. Components should be invisible; content should shine.",
+      "Do provide hover feedback on interactive elements. Subtle, never gratuitous."
+    ],
+    "donts": [
+      "Don't use shadows for depth. Tonal shifts and motion convey elevation.",
+      "Don't add motion for motion's sake. If there's no meaning to the motion, remove it.",
+      "Don't use bright, neon, or saturated accent colors. Rose, lavender, and plum are muted intentionally.",
+      "Don't introduce new serif or sans families. Stick to Fraunces (display) and Inter (body).",
+      "Don't use side-stripe borders (border-left / border-right > 1px as colored accents). Never intentional.",
+      "Don't create gradient text (background-clip: text). It's decorative and reduces readability.",
+      "Don't use nested cards. Tonal shifts are enough; stacked chrome clutters the page.",
+      "Don't render interactive elements with no hover state. Every clickable thing should respond.",
+      "Don't let the design compete with the work. The portfolio is about outcomes, not visual effects.",
+      "Don't feel pressured to fill silence with decoration. Whitespace is a design tool here.",
+      "Don't vague or hide the actual outcomes. Show impact directly: scale, metrics, user outcomes."
+    ]
+  }
+}
