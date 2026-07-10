@@ -74,7 +74,7 @@ export const HERO_COPY: Record<Exclude<AudienceId, "machines">, HeroCopy> = {
       { text: "product manager", phrase: "pm" },
       { text: "." },
     ],
-    sub: "Open to senior PM roles.",
+    sub: "",
   },
   founders: {
     segments: [

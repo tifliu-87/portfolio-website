@@ -1,6 +1,6 @@
 ---
 name: PM Portfolio
-description: Confident PM portfolio—rose-to-plum themes, serif display, thoughtful interactions
+description: Confident PM portfolio, rose-to-plum themes, serif display, thoughtful interactions
 colors:
   cream-bg: "#f9f1f3"
   surface: "#f3e9ed"
