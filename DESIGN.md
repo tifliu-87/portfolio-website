@@ -15,22 +15,21 @@ typography:
   display:
     fontFamily: '"Fraunces Variable", "Iowan Old Style", Georgia, serif'
     fontSize: "clamp(1.05rem, 1.6vw, 1.35rem)"
-    fontWeight: 600
+    fontWeight: 560
     lineHeight: 1.15
-    letterSpacing: "-0.005em"
-    fontVariation: '"opsz" 144'
+    letterSpacing: "-0.01em"
   headline:
     fontFamily: '"Fraunces Variable", "Iowan Old Style", Georgia, serif'
     fontSize: "clamp(1.2rem, 2.2vw, 1.7rem)"
-    fontWeight: 600
+    fontWeight: 560
     lineHeight: 1.3
-    letterSpacing: "-0.005em"
+    letterSpacing: "-0.01em"
   title:
     fontFamily: '"Fraunces Variable", "Iowan Old Style", Georgia, serif'
     fontSize: "0.95rem"
-    fontWeight: 600
+    fontWeight: 560
     lineHeight: 1.15
-    letterSpacing: "-0.005em"
+    letterSpacing: "-0.01em"
   body:
     fontFamily: '"Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif'
     fontSize: "0.9rem"
@@ -147,7 +146,7 @@ A six-stop interpolation from rose through lavender to plum, with carefully tune
 
 ## 3. Typography
 
-**Display Font:** Fraunces Variable (weight 600, with optical size axis tuned to 144 for headlines)  
+**Display Font:** Fraunces Variable (weight 560, automatic optical sizing)  
 **Body Font:** Inter Variable  
 **Mono Font:** System monospace (Cascadia Code, SF Mono, Menlo, Consolas)
 
@@ -155,9 +154,9 @@ A six-stop interpolation from rose through lavender to plum, with carefully tune
 
 ### Hierarchy
 
-- **Display** (Fraunces 600, clamp(1.05rem, 1.6vw, 1.35rem), line-height 1.15): Hero name, primary identity. High-impact introduction. Scales with viewport so it feels right from mobile to desktop.
-- **Headline** (Fraunces 600, clamp(1.2rem, 2.2vw, 1.7rem), line-height 1.3): Section titles, case study names. Readable at a glance; text-wrap: balance ensures even line lengths.
-- **Title** (Fraunces 600, 0.95rem, line-height 1): Card titles, project names. Smaller but still commanding.
+- **Display** (Fraunces 560, clamp(1.05rem, 1.6vw, 1.35rem), line-height 1.15): Hero name, primary identity. High-impact introduction. Scales with viewport so it feels right from mobile to desktop.
+- **Headline** (Fraunces 560, clamp(1.2rem, 2.2vw, 1.7rem), line-height 1.3): Section titles, case study names. Readable at a glance; text-wrap: balance ensures even line lengths.
+- **Title** (Fraunces 560, 0.95rem, line-height 1): Card titles, project names. Smaller but still commanding.
 - **Body** (Inter, 0.9rem, line-height 1.6): All running text. Max width 30–34ch to keep line length comfortable. Muted gray for secondary copy.
 - **Small** (Inter, 0.85rem, line-height 1.55): Inline expansions (the hero unfold) and compact controls.
 - **Label** (Inter, 0.78rem, line-height 1.5): Tabs, taglines, links, footer text, sub-lines.
@@ -169,7 +168,7 @@ These six sans steps are the whole ramp; new UI picks the nearest step instead o
 
 ### Named Rules
 
-**The Weight Consistency Rule.** Serif faces use weight 600 (Fraunces). Sans and mono remain at their default (Inter 400). No weight mixing within a family.
+**The Weight Consistency Rule.** Serif faces use weight 560 (Fraunces). Sans and mono remain at their default (Inter 400). No weight mixing within a family.
 
 **The Baseline Rule.** All text aligns to a shared baseline grid (line-height 1.6 on body, 1.15 on display). This creates invisible scaffolding.
 
@@ -243,7 +242,7 @@ Flat-by-default keeps the portfolio calm and readable. Tonal shifts (background 
 
 ### Do
 
-- **Do** use Fraunces 600 for all headlines and display text. It conveys craft and authority.
+- **Do** use Fraunces 560 for all headlines and display text. It conveys craft and authority.
 - **Do** keep accent color to ≤10% of any screen. Its rarity makes it powerful.
 - **Do** use muted gray for secondary copy; it reads as confident, not timid. Ensure 4.5:1 contrast against backgrounds.
 - **Do** animate via opacity and transform only (translate, scale, rotate). Never animate layout properties (width, height, padding).

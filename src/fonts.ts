@@ -21,22 +21,23 @@ export interface FontOption {
 }
 
 export const FONT_OPTIONS: FontOption[] = [
+  // First option is the site default; global.css :root defaults must match.
+  {
+    id: "fraunces",
+    label: "Fraunces (default)",
+    display: '"Fraunces Variable", Georgia, serif',
+    displayWeight: "560",
+    tracking: "-0.01em",
+    body: INTER,
+  },
   {
     id: "fraunces-display",
-    label: "Fraunces Display (original)",
+    label: "Fraunces Display",
     display: '"Fraunces Variable", Georgia, serif',
     displayWeight: "600",
     tracking: "-0.005em",
     body: INTER,
     variation: '"opsz" 144',
-  },
-  {
-    id: "fraunces",
-    label: "Fraunces",
-    display: '"Fraunces Variable", Georgia, serif',
-    displayWeight: "560",
-    tracking: "-0.01em",
-    body: INTER,
   },
   {
     id: "newsreader",

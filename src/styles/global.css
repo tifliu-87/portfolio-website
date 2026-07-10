@@ -11,11 +11,11 @@
   --dur-small: 420ms;  /* inline expansions, card hovers */
   --dur-large: 750ms;  /* section transitions, theme shifts */
 
-  /* Defaults match the "Fraunces Display (original)" option in src/fonts.ts */
+  /* Defaults match the "Fraunces (default)" option in src/fonts.ts */
   --font-display: "Fraunces Variable", "Iowan Old Style", Georgia, serif;
-  --display-weight: 600;
-  --display-tracking: -0.005em;
-  --display-variation: "opsz" 144;
+  --display-weight: 560;
+  --display-tracking: -0.01em;
+  --display-variation: normal;
   --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
 
