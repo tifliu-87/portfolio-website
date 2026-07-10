@@ -1,5 +1,5 @@
 import { useEffect, type CSSProperties } from "react";
-import { NAME, type Project } from "../data";
+import { EMAIL, NAME, type Project } from "../data";
 
 export function ProjectPage({ project }: { project: Project }) {
   useEffect(() => {
@@ -15,26 +15,34 @@ export function ProjectPage({ project }: { project: Project }) {
         ← All work
       </a>
       <h1>{project.title}</h1>
-      <p className="pp-tagline">{project.tagline}</p>
+      {project.tagline && <p className="pp-tagline">{project.tagline}</p>}
       <div className="pp-cover" style={{ "--tint": project.tint } as CSSProperties} aria-hidden="true" />
-      <dl className="pp-facts">
-        <div>
-          <dt>Role</dt>
-          <dd>{project.role}</dd>
-        </div>
-        <div>
-          <dt>Problem</dt>
-          <dd>{project.problem}</dd>
-        </div>
-        <div>
-          <dt>Approach</dt>
-          <dd>{project.approach}</dd>
-        </div>
-        <div>
-          <dt>Impact</dt>
-          <dd>{project.impact}</dd>
-        </div>
-      </dl>
+      {project.facts ? (
+        <dl className="pp-facts">
+          <div>
+            <dt>Role</dt>
+            <dd>{project.facts.role}</dd>
+          </div>
+          <div>
+            <dt>Problem</dt>
+            <dd>{project.facts.problem}</dd>
+          </div>
+          <div>
+            <dt>Approach</dt>
+            <dd>{project.facts.approach}</dd>
+          </div>
+          <div>
+            <dt>Impact</dt>
+            <dd>{project.facts.impact}</dd>
+          </div>
+        </dl>
+      ) : (
+        <p className="pp-pending">
+          The full case study is in progress.{" "}
+          <a href={`mailto:${EMAIL}`}>Email me</a> and I will gladly walk you
+          through this one in the meantime.
+        </p>
+      )}
     </article>
   );
 }

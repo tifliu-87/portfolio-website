@@ -178,6 +178,10 @@ Flat-by-default keeps the portfolio calm and readable. Tonal shifts (background 
 **Project Page Cover**
 - **Size:** 16/8 aspect ratio, 16px radius. Same tinted blend as work cards. Transitions background on theme shift (var(--dur-large), ~750ms).
 
+**In-Progress Case Studies**
+- **Grid:** Projects without a tagline never render as near-empty cards; they collapse into one quiet sentence of links under the grid ("Case studies in progress: ..."), label size, muted, underlined in the line color.
+- **Page:** Absent facts render a single honest sentence with an accent email link (the site's primary CTA) instead of repeated placeholder text.
+
 ### Interactive Elements
 
 **Phrase (Hover Reveal)**

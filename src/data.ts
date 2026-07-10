@@ -132,28 +132,30 @@ export const HIDDEN_WORDS: string[] = [
 
 /* ---------------------------------- Projects ---------------------------------- */
 
-export interface Project {
-  id: string;
-  title: string;
-  tagline: string;
+export interface ProjectFacts {
   role: string;
   problem: string;
   approach: string;
   impact: string;
+}
+
+export interface Project {
+  id: string;
+  title: string;
+  /** One-line description. Empty while the case study is still being written;
+      those projects render as a quiet list under the grid, not as cards. */
+  tagline: string;
+  /** Case-study facts; add them here when the real write-up lands. Absent
+      facts render as a single "in progress" note with a contact link. */
+  facts?: ProjectFacts;
   /** Flat cover tint: % of accent mixed into the surface color. */
   tint: number;
 }
-
-const TBD = "TBD: case study coming soon.";
 
 const p = (id: string, title: string, tagline: string, tint: number): Project => ({
   id,
   title,
   tagline,
-  role: TBD,
-  problem: TBD,
-  approach: TBD,
-  impact: TBD,
   tint,
 });
 
@@ -164,8 +166,8 @@ export const PROJECTS: Project[] = [
   p("beacons-brands", "Beacons Brands", "Giving brands a direct line to creators their audiences trust.", 22),
   p("coldreach", "Coldreach", "An end-to-end, research-driven AI SDR.", 64),
   p("nucurrent-cube", "NuCurrent Cube", "An inventory system built from scratch for an engineering lab.", 28),
-  p("jamtown-cube", "Jamtown Cube", "Case study coming soon.", 40),
-  p("nava", "NAVA", "Case study coming soon.", 16),
-  p("aura", "Aura", "Case study coming soon.", 52),
-  p("axial", "Axial", "Case study coming soon.", 36),
+  p("jamtown-cube", "Jamtown Cube", "", 40),
+  p("nava", "NAVA", "", 16),
+  p("aura", "Aura", "", 52),
+  p("axial", "Axial", "", 36),
 ];
