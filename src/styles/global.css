@@ -530,11 +530,16 @@ h3 {
   gap: 0.7rem;
 }
 
+/* Anchored above the track (growing upward) so the live stop name can change
+   length without nudging the rail. */
 .theme-slider .swatch-label {
+  position: absolute;
+  bottom: calc(100% + 0.7rem);
   writing-mode: vertical-rl;
   font-size: 0.68rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
+  white-space: nowrap;
   color: var(--ink-muted);
   user-select: none;
 }
@@ -621,6 +626,13 @@ h3 {
   box-shadow: 0 1px 6px rgb(0 0 0 / 0.25);
   pointer-events: none;
   will-change: transform;
+  /* scale composes with the JS-written translateY transform */
+  scale: 1;
+  transition: scale var(--dur-micro) var(--ease);
+}
+
+.slider-track:active .slider-handle {
+  scale: 1.12;
 }
 
 /* Mobile variant: a compact row of swatches, bottom-right */

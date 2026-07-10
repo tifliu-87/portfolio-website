@@ -194,8 +194,9 @@ Flat-by-default keeps the portfolio calm and readable. Tonal shifts (background 
 ### Theme Controls
 
 **Slider (Fixed Right)**
-- **Rail:** 7px wide, 260px tall, linear gradient from rose accent through all theme colors. Opacity 0.9. Tiny radial handle (1.5rem diameter) with 3px border. Box-shadow for depth.
+- **Rail:** 7px wide, 260px tall, linear gradient from rose accent through all theme colors. Opacity 0.9. Tiny radial handle (1.5rem diameter) with 3px border. Box-shadow for depth; the handle scales to 1.12 while dragging.
 - **Ticks:** Six small dots along the rail, one per theme stop. On hover, the inner dot scales 1.6x. Touch: grab/grabbing cursors.
+- **Live Label:** The vertical "shade" label above the rail reads the nearest stop's name (lowercase) while the theme is moving, then settles back to "shade" ~1.2s after it stops. Anchored above the track so name length never nudges the rail.
 
 **Mobile Swatches (Fixed Bottom-Right)**
 - **Container:** Rounded pill (border-radius 999px), semi-transparent surface background (90% opaque), thin line border. 0.5rem gap between swatch buttons.
