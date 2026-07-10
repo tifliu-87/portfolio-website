@@ -10,6 +10,7 @@ colors:
   accent-soft: "#f0dce5"
   accent-light: "#fdf5f9"
   line-subtle: "#e0cad5"
+  handle-shadow: "rgb(0 0 0 / 0.25)"
 typography:
   display:
     fontFamily: '"Fraunces Variable", "Iowan Old Style", Georgia, serif'
@@ -24,16 +25,39 @@ typography:
     fontWeight: 600
     lineHeight: 1.3
     letterSpacing: "-0.005em"
+  title:
+    fontFamily: '"Fraunces Variable", "Iowan Old Style", Georgia, serif'
+    fontSize: "0.95rem"
+    fontWeight: 600
+    lineHeight: 1.15
+    letterSpacing: "-0.005em"
   body:
     fontFamily: '"Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif'
     fontSize: "0.9rem"
     fontWeight: 400
     lineHeight: 1.6
+  small:
+    fontFamily: '"Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif'
+    fontSize: "0.85rem"
+    fontWeight: 400
+    lineHeight: 1.55
   label:
     fontFamily: '"Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif'
     fontSize: "0.78rem"
     fontWeight: 400
     lineHeight: 1.5
+  caps-label:
+    fontFamily: '"Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif'
+    fontSize: "0.74rem"
+    fontWeight: 600
+    lineHeight: 1.5
+    letterSpacing: "0.12em"
+  micro:
+    fontFamily: '"Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif'
+    fontSize: "0.68rem"
+    fontWeight: 400
+    lineHeight: 1.5
+    letterSpacing: "0.16em"
   mono:
     fontFamily: 'ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace'
     fontSize: "clamp(0.68rem, 1.3vw, 0.78rem)"
@@ -135,8 +159,13 @@ A six-stop interpolation from rose through lavender to plum, with carefully tune
 - **Headline** (Fraunces 600, clamp(1.2rem, 2.2vw, 1.7rem), line-height 1.3): Section titles, case study names. Readable at a glance; text-wrap: balance ensures even line lengths.
 - **Title** (Fraunces 600, 0.95rem, line-height 1): Card titles, project names. Smaller but still commanding.
 - **Body** (Inter, 0.9rem, line-height 1.6): All running text. Max width 30–34ch to keep line length comfortable. Muted gray for secondary copy.
-- **Label** (Inter, 0.78rem, line-height 1.5): Tabs, form labels, footer text. Uppercase when needed (case study facts).
+- **Small** (Inter, 0.85rem, line-height 1.55): Inline expansions (the hero unfold) and compact controls.
+- **Label** (Inter, 0.78rem, line-height 1.5): Tabs, taglines, links, footer text, sub-lines.
+- **Caps Label** (Inter 600, 0.74rem, letter-spacing 0.12em, uppercase): Case study fact headings.
+- **Micro** (Inter, 0.68rem, letter-spacing 0.16em, uppercase): The slider's vertical label and other fixed-control captions.
 - **Mono** (System, clamp(0.68rem, 1.3vw, 0.78rem), line-height 1.7): Hidden words in the hero; machines tab; code snippets. Quiet, precise.
+
+These six sans steps are the whole ramp; new UI picks the nearest step instead of minting another size.
 
 ### Named Rules
 
@@ -207,7 +236,7 @@ Flat-by-default keeps the portfolio calm and readable. Tonal shifts (background 
 - **Swatch Buttons:** 1.25rem circles, 2px transparent border by default. Active swatch: ink-colored border + scale 1.15. Transition ~200ms.
 
 **Font Picker (Fixed Bottom-Left)**
-- **Style:** Compact vertical stack, rounded 14px, semi-transparent background, line border. Buttons are small label text (0.85rem), muted by default, accent when active.
+- **Style:** Compact vertical stack, rounded 12px, semi-transparent background, line border. Buttons are small label text (0.85rem), muted by default, accent when active.
 - **Interaction:** Color transition ~200ms on hover/active. No background pill; color is the affordance.
 
 ## 6. Do's and Don'ts
