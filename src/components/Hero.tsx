@@ -23,7 +23,37 @@ import { useCoarsePointer, usePrefersReducedMotion } from "../hooks";
  * raises its opacity and sharpness, and once found it settles to a quiet
  * steady presence for the rest of the visit. On touch or reduced-motion the
  * line is simply not rendered.
+ *
+ * The headline and name are also split into per-letter spans (.wk): letters
+ * near the cursor lean into Fraunces' SOFT and WONK variable axes and ease
+ * back as it moves away, driven by the same proximity loop as the words.
  */
+
+/**
+ * Splits text into per-letter spans for the proximity wonk effect. Words are
+ * wrapped in white-space:nowrap spans so lines still break only at spaces;
+ * the space runs themselves are re-emitted verbatim as text nodes.
+ */
+function Wonky({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(/(\s+)/).map((part, i) =>
+        /^\s/.test(part) ? (
+          part
+        ) : part ? (
+          <span key={i} className="wonk-w">
+            {Array.from(part).map((ch, j) => (
+              <span key={j} className="wk">
+                {ch}
+              </span>
+            ))}
+          </span>
+        ) : null,
+      )}
+    </>
+  );
+}
+
 export function Hero() {
   const [audience, setAudience] = useState<AudienceId>("everyone");
   const [active, setActive] = useState<PhraseKey | null>(null);
@@ -38,15 +68,21 @@ export function Hero() {
     return () => window.clearTimeout(closeTimer.current);
   }, [audience]);
 
-  // Feathered proximity reveal of the hidden words. Each word carries a
-  // per-frame --near value (0..1) computed from its distance to the smoothed
-  // cursor with a smoothstep falloff, so the reveal has a soft radial edge
-  // without any lens geometry. Once a word has been mostly uncovered it is
-  // marked .lit and keeps a low steady presence for the rest of the visit.
+  // Feathered proximity field for the hidden words and the wonky letters.
+  // Words carry a per-frame --near value (0..1) computed from distance to the
+  // smoothed cursor with a smoothstep falloff; once mostly uncovered they are
+  // marked .lit and keep a low steady presence. Letters (.wk) use the same
+  // falloff over a tighter radius to swell toward Fraunces' display optical
+  // size and lean into its SOFT/WONK axes (whose deltas only act at display
+  // opsz), easing back to upright as the cursor moves on. Since opsz changes
+  // advance widths, every word box (.wonk-w) is locked to its resting width
+  // so the morph can never re-wrap a line: letters squirm inside their word.
   useEffect(() => {
     const section = sectionRef.current;
     if (!section || coarse || reduced) return;
     const words = Array.from(section.querySelectorAll<HTMLElement>(".hero-word"));
+    const letters = Array.from(section.querySelectorAll<HTMLElement>(".wk"));
+    const boxes = Array.from(section.querySelectorAll<HTMLElement>(".wonk-w"));
 
     let raf = 0;
     let animating = false;
@@ -54,30 +90,79 @@ export function Hero() {
     let pointerIn = false;
     const cur = { x: 0, y: 0 };
     const target = { x: 0, y: 0 };
-    type Spot = { el: HTMLElement; x: number; y: number; near: number; lit: boolean };
+    type Spot = {
+      el: HTMLElement;
+      word: boolean;
+      x: number;
+      y: number;
+      /** Resting px font-size, used as the letter's resting opsz. */
+      size: number;
+      near: number;
+      prev: number;
+      lit: boolean;
+    };
     let spots: Spot[] = [];
 
     const measure = () => {
       const sr = section.getBoundingClientRect();
-      spots = words.map((el, i) => {
+      spots = [...words, ...letters].map((el, i) => {
         const r = el.getBoundingClientRect();
         return {
           el,
+          word: i < words.length,
           x: r.left - sr.left + r.width / 2,
           y: r.top - sr.top + r.height / 2,
+          size: i < words.length ? 0 : parseFloat(getComputedStyle(el).fontSize),
           near: spots[i]?.near ?? 0,
+          prev: spots[i]?.prev ?? -1,
           lit: spots[i]?.lit ?? false,
         };
       });
     };
+
+    // Freeze each word box at its natural width, measured with every letter
+    // at rest. Marking prev dirty makes the next tick re-write in-flight
+    // letters that the reset below momentarily straightened.
+    const lockWidths = () => {
+      for (const el of letters) el.style.fontVariationSettings = "";
+      for (const box of boxes) box.style.width = "";
+      const natural = boxes.map((box) => box.getBoundingClientRect().width);
+      boxes.forEach((box, i) => {
+        box.style.width = `${natural[i].toFixed(2)}px`;
+      });
+      for (const s of spots) if (!s.word) s.prev = -1;
+    };
+
+    lockWidths();
     measure();
-    const ro = new ResizeObserver(measure);
+    // Glyph metrics shift once the webfonts land; re-measure so widths and
+    // letter centers aren't stuck at fallback-font values. Same when the
+    // font tester swaps the display face.
+    const relock = () => {
+      lockWidths();
+      measure();
+    };
+    document.fonts?.ready.then(relock);
+    window.addEventListener("fontchange", relock);
+    let lastWidth = section.getBoundingClientRect().width;
+    const ro = new ResizeObserver(() => {
+      // Width locks are only invalidated by horizontal resizes (the clamp()
+      // type scale); height-only changes like the unfold just re-measure.
+      const w = section.getBoundingClientRect().width;
+      if (w !== lastWidth) {
+        lastWidth = w;
+        lockWidths();
+      }
+      measure();
+    });
     ro.observe(section);
 
-    // Full reveal at the cursor, fading to nothing at REVEAL_RADIUS; a word
-    // counts as found once it has been mostly uncovered. Sized so a couple
-    // of neighboring words glow while the hovered one reads sharp.
+    // Words: full reveal at the cursor, fading to nothing at REVEAL_RADIUS;
+    // found once mostly uncovered. Sized so a couple of neighboring words
+    // glow while the hovered one reads sharp. Letters: a tighter radius so
+    // only the word or two under the cursor goes wonky.
     const REVEAL_RADIUS = 120;
+    const WONK_RADIUS = 90;
     const FOUND_AT = 0.7;
     const tick = () => {
       cur.x += (target.x - cur.x) * 0.16;
@@ -85,18 +170,28 @@ export function Hero() {
       let busy = Math.hypot(target.x - cur.x, target.y - cur.y) > 0.3;
       for (const s of spots) {
         const d = Math.hypot(s.x - cur.x, s.y - cur.y);
-        let t = pointerIn ? Math.max(0, 1 - d / REVEAL_RADIUS) : 0;
+        let t = pointerIn ? Math.max(0, 1 - d / (s.word ? REVEAL_RADIUS : WONK_RADIUS)) : 0;
         t = t * t * (3 - 2 * t);
-        s.near += (t - s.near) * 0.14;
+        s.near += (t - s.near) * (s.word ? 0.14 : 0.2);
         if (Math.abs(t - s.near) > 0.004) {
           busy = true;
         } else {
           s.near = t;
         }
-        s.el.style.setProperty("--near", s.near.toFixed(3));
-        if (!s.lit && s.near > FOUND_AT) {
-          s.lit = true;
-          s.el.classList.add("lit");
+        if (s.near === s.prev) continue;
+        s.prev = s.near;
+        if (s.word) {
+          s.el.style.setProperty("--near", s.near.toFixed(3));
+          if (!s.lit && s.near > FOUND_AT) {
+            s.lit = true;
+            s.el.classList.add("lit");
+          }
+        } else if (s.near === 0) {
+          // Fully at rest: drop the override so auto optical sizing returns.
+          s.el.style.fontVariationSettings = "";
+        } else {
+          const opsz = s.size + (Math.min(120, s.size * 3.5) - s.size) * s.near;
+          s.el.style.fontVariationSettings = `"opsz" ${opsz.toFixed(1)}, "SOFT" ${(s.near * 50).toFixed(1)}, "WONK" ${s.near.toFixed(3)}`;
         }
       }
       if (busy) {
@@ -136,10 +231,13 @@ export function Hero() {
     return () => {
       section.removeEventListener("pointermove", onMove);
       section.removeEventListener("pointerleave", onLeave);
+      window.removeEventListener("fontchange", relock);
       ro.disconnect();
       cancelAnimationFrame(raf);
     };
-  }, [coarse, reduced]);
+    // audience: the headline is keyed by it, so its letter spans are new DOM
+    // nodes after every tab switch and must be re-queried.
+  }, [coarse, reduced, audience]);
 
   const open = (key: PhraseKey) => {
     window.clearTimeout(closeTimer.current);
@@ -202,7 +300,7 @@ export function Hero() {
                     if (!seg.phrase) {
                       return (
                         <span key={i} className="hero-seg" style={style}>
-                          {seg.text}
+                          <Wonky text={seg.text} />
                         </span>
                       );
                     }
@@ -216,6 +314,7 @@ export function Hero() {
                         tabIndex={0}
                         className={`hero-seg phrase${isOpen ? " on" : ""}`}
                         style={style}
+                        aria-label={seg.text}
                         aria-expanded={isOpen}
                         onPointerEnter={coarse ? undefined : () => open(phrase)}
                         onPointerLeave={coarse ? undefined : scheduleClose}
@@ -230,7 +329,7 @@ export function Hero() {
                           }
                         }}
                       >
-                        {seg.text}
+                        <Wonky text={seg.text} />
                       </span>
                     );
                   })}
@@ -296,7 +395,9 @@ export function Hero() {
                   </svg>
                 </a>
               </div>
-              <p className="hero-name">{NAME.toLowerCase()}</p>
+              <p className="hero-name">
+                <Wonky text={NAME.toLowerCase()} />
+              </p>
             </div>
             <p className="hero-role">product manager · builder</p>
             <div className="hero-links">

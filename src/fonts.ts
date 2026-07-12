@@ -80,4 +80,7 @@ export function applyFont(option: FontOption): void {
   root.style.setProperty("--display-tracking", option.tracking);
   root.style.setProperty("--display-variation", option.variation ?? "normal");
   root.style.setProperty("--font-sans", option.body);
+  // The hero locks its word boxes to widths measured in the current display
+  // face; let it re-measure under the new one.
+  window.dispatchEvent(new Event("fontchange"));
 }

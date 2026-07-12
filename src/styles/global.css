@@ -423,6 +423,15 @@ h3 {
   filter: none;
 }
 
+/* Wonky letters: headline and name are split into per-letter spans; Hero.tsx
+   writes each letter's font-variation-settings (Fraunces opsz/SOFT/WONK) per
+   frame from cursor proximity. Word boxes are inline-blocks locked to their
+   resting width by the JS, so the morphing glyphs can never re-wrap a line. */
+.wonk-w {
+  display: inline-block;
+  white-space: nowrap;
+}
+
 /* ------------------------------------ Work ------------------------------------- */
 
 .work {
