@@ -122,6 +122,73 @@ h3 {
   transform: none;
 }
 
+/* --------------------------------- Site header ---------------------------------- */
+
+/* Absent while the hero is on screen; slides in once the visitor scrolls past
+   it (SiteHeader.tsx toggles .show). Sits below the fixed controls (z 30). */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 28;
+  transform: translateY(-100%);
+  transition: transform var(--dur-small) var(--ease);
+  background: color-mix(in oklab, var(--bg) 88%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+
+.site-header.show {
+  transform: translateY(0);
+}
+
+.sh-inner {
+  max-width: var(--content-width);
+  margin-inline: auto;
+  padding: 0.7rem clamp(1.25rem, 5vw, 3rem);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sh-name {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--display-tracking);
+  font-variation-settings: var(--display-variation);
+  font-size: 0.95rem;
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.sh-nav {
+  display: flex;
+  gap: clamp(0.9rem, 2.5vw, 1.5rem);
+  font-size: 0.78rem;
+}
+
+.sh-nav a {
+  color: var(--ink-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--dur-micro) var(--ease);
+}
+
+.sh-nav a:hover {
+  color: var(--accent);
+}
+
+/* Narrow screens: drop the least essential link so the row never wraps. */
+@media (max-width: 480px) {
+  .sh-ai {
+    display: none;
+  }
+}
+
 /* ------------------------------------ Hero ------------------------------------- */
 
 .hero {

@@ -7,6 +7,7 @@ import { ProjectPage } from "./components/ProjectPage";
 import { ThemeSlider } from "./components/ThemeSlider";
 import { FontPicker } from "./components/FontPicker";
 import { CursorField } from "./components/CursorField";
+import { SiteHeader } from "./components/SiteHeader";
 
 /** Tiny hash router; works on any static host with zero config. */
 function useHashRoute(): string {
@@ -14,7 +15,9 @@ function useHashRoute(): string {
   useEffect(() => {
     const onChange = () => {
       setHash(window.location.hash);
-      window.scrollTo(0, 0);
+      // Route changes (#/...) start at the top; in-page anchors like #work
+      // keep the browser's native scroll so the header can jump to sections.
+      if (window.location.hash.startsWith("#/")) window.scrollTo(0, 0);
     };
     window.addEventListener("hashchange", onChange);
     return () => window.removeEventListener("hashchange", onChange);
@@ -31,6 +34,7 @@ export default function App() {
 
   return (
     <>
+      <SiteHeader />
       <div className="page">
         <main>{project ? <ProjectPage project={project} /> : (
           <>
