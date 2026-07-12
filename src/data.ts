@@ -6,7 +6,8 @@
 // ⚠️ Placeholder name: swap in the real one here and in index.html.
 export const NAME = "Tiffany Liu";
 export const EMAIL = "tl87@illinois.edu";
-export const LINKEDIN_URL = "https://www.linkedin.com/"; // placeholder
+export const LINKEDIN_URL = "https://www.linkedin.com/in/tiffany-liu-0b4593382";
+export const GITHUB_URL = "https://github.com/tifliu-87";
 export const RESUME_URL = "/resume.pdf"; // placeholder: drop the real file into /public
 
 /* ---------------------------------- Audiences --------------------------------- */

@@ -174,6 +174,60 @@ h3 {
   color: var(--accent);
 }
 
+/* Icon row above the name (GitHub, LinkedIn, email): the row keeps its height
+   at rest so revealing it never shifts the layout; icons pop in with a small
+   stagger when the name is hovered or focused. Touch has no hover, so there
+   they are simply visible. */
+.id-icons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  min-height: 14px;
+  margin-bottom: 0.5rem;
+}
+
+.id-icons a {
+  display: inline-block;
+  color: var(--ink-muted);
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition:
+    opacity var(--dur-micro) var(--ease),
+    transform var(--dur-micro) var(--ease),
+    color var(--dur-micro) var(--ease);
+  transition-delay: calc(var(--i, 0) * 40ms);
+}
+
+.id-icons a svg {
+  display: block;
+}
+
+.hero-name-block:hover .id-icons a,
+.hero-name-block:focus-within .id-icons a {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.id-icons a:hover {
+  color: var(--accent);
+}
+
+@media (hover: none) {
+  .id-icons a {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+}
+
+@media (max-width: 760px) {
+  .id-icons {
+    justify-content: flex-start;
+  }
+}
+
 .hero-role {
   margin-top: 0.4rem;
   color: var(--ink-muted);
@@ -803,6 +857,7 @@ h3 {
   .hero-seg,
   .hero-sub,
   .hero-word,
+  .id-icons a,
   .machine-block {
     transition-property: opacity !important;
     transition-duration: 180ms !important;
