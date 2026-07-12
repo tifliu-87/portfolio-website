@@ -158,10 +158,11 @@ export function Hero() {
     ro.observe(section);
 
     // Words: full reveal at the cursor, fading to nothing at REVEAL_RADIUS;
-    // found once mostly uncovered. Sized so a couple of neighboring words
-    // glow while the hovered one reads sharp. Letters: a tighter radius so
-    // only the word or two under the cursor goes wonky.
-    const REVEAL_RADIUS = 120;
+    // found once mostly uncovered. Generous so the words start glowing while
+    // the cursor is still a fair distance away and first-time visitors can't
+    // miss them. Letters: a tighter radius so only the word or two under the
+    // cursor goes wonky.
+    const REVEAL_RADIUS = 200;
     const WONK_RADIUS = 90;
     const FOUND_AT = 0.7;
     const tick = () => {
