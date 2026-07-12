@@ -19,9 +19,9 @@
   --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
 
-  /* Default "Rose" stop: cream with a subtle pink tint. */
-  --bg: hsl(347 36% 96%);
-  --surface: hsl(345 30% 92%);
+  /* Default "Rose" stop: white with an almost imperceptible pink whisper. */
+  --bg: hsl(347 30% 99%);
+  --surface: hsl(345 22% 95%);
   --ink: hsl(340 30% 16%);
   --ink-muted: hsl(340 10% 40%);
   --accent: hsl(343 42% 46%);

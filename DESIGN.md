@@ -2,8 +2,8 @@
 name: PM Portfolio
 description: Confident PM portfolio, rose-to-plum themes, serif display, thoughtful interactions
 colors:
-  cream-bg: "#f9f1f3"
-  surface: "#f3e9ed"
+  cream-bg: "#fdfcfc"
+  surface: "#f5eff1"
   ink-dark: "#3a1b28"
   ink-muted: "#666564"
   accent-rose: "#b8497a"
@@ -123,7 +123,7 @@ Explicitly rejects: slick corporate formality, trendy or flashy design, vague pr
 
 ## 2. Colors
 
-A six-stop interpolation from rose through lavender to plum, with carefully tuned light and dark modes. The default is Rose: a cream background with a subtle pink tint, paired with rose accents. Visitors can shift through the full spectrum via the theme slider.
+A six-stop interpolation from rose through lavender to plum, with carefully tuned light and dark modes. The default is Rose: an essentially white background carrying only a whisper of pink, paired with rose accents. Visitors can shift through the full spectrum via the theme slider.
 
 ### Primary
 
@@ -132,9 +132,9 @@ A six-stop interpolation from rose through lavender to plum, with carefully tune
 
 ### Neutral
 
-- **Cream BG** (#f9f1f3): The default background; cream with a subtle pink tint so the rose theme feels cohesive rather than tinted.
-- **Surface** (#f3e9ed): Slightly darker surface for cards, covers, and layered elements. Creates gentle depth without requiring shadows.
-- **Ink Dark** (#3a1b28): Body text and strong contrast. Meets 4.5:1 WCAG AA against the cream.
+- **Cream BG** (#fdfcfc): The default background; white with an almost imperceptible pink whisper so the page reads clean and professional while still belonging to the rose theme.
+- **Surface** (#f5eff1): Slightly darker surface for cards, covers, and layered elements. Creates gentle depth without requiring shadows.
+- **Ink Dark** (#3a1b28): Body text and strong contrast. Meets 4.5:1 WCAG AA against the background.
 - **Ink Muted** (#666564): Secondary copy, labels, helper text. Still meets 4.5:1 WCAG AA; reads as confidence, not timidity.
 - **Line Subtle** (#e0cad5): Borders, dividers, the footer line. Present but quiet.
 

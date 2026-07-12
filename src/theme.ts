@@ -7,8 +7,8 @@
  * <html>. Everything on the page derives its color from those variables, so a
  * single write re-themes the whole site with zero React re-renders.
  *
- * Light-mode backgrounds stay near-cream (high lightness, low saturation) so
- * the shade reads as a subtle tint rather than a wall of color.
+ * Light-mode backgrounds stay essentially white (L 99%) with a whisper of the
+ * active hue, so the page reads clean and professional rather than tinted.
  */
 
 export type Hsl = readonly [h: number, s: number, l: number];
@@ -32,8 +32,8 @@ export const THEME_STOPS: ThemeStop[] = [
     id: "rose",
     name: "Rose",
     scheme: "light",
-    bg: [347, 36, 96],
-    surface: [345, 30, 92],
+    bg: [347, 30, 99],
+    surface: [345, 22, 95],
     ink: [340, 30, 16],
     inkMuted: [340, 10, 40],
     accent: [343, 42, 46],
@@ -45,8 +45,8 @@ export const THEME_STOPS: ThemeStop[] = [
     id: "mauve",
     name: "Dusty mauve",
     scheme: "light",
-    bg: [325, 28, 96],
-    surface: [325, 24, 92],
+    bg: [325, 22, 99],
+    surface: [325, 17, 95],
     ink: [325, 26, 16],
     inkMuted: [325, 10, 40],
     accent: [327, 34, 48],
@@ -58,8 +58,8 @@ export const THEME_STOPS: ThemeStop[] = [
     id: "lavender",
     name: "Soft lavender",
     scheme: "light",
-    bg: [268, 25, 96],
-    surface: [268, 22, 92],
+    bg: [268, 20, 99],
+    surface: [268, 16, 95],
     ink: [268, 26, 16],
     inkMuted: [267, 10, 42],
     accent: [266, 36, 54],
@@ -71,8 +71,8 @@ export const THEME_STOPS: ThemeStop[] = [
     id: "heather",
     name: "Heather",
     scheme: "light",
-    bg: [285, 20, 96],
-    surface: [285, 18, 92],
+    bg: [285, 16, 99],
+    surface: [285, 13, 95],
     ink: [282, 24, 16],
     inkMuted: [282, 9, 42],
     accent: [283, 28, 50],
