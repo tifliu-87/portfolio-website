@@ -8,7 +8,7 @@ export const NAME = "Tiffany Liu";
 export const EMAIL = "tiffanyliu088@gmail.com";
 export const LINKEDIN_URL = "https://www.linkedin.com/in/tiffany-liu-0b4593382";
 export const GITHUB_URL = "https://github.com/tifliu-87";
-export const RESUME_URL = "/resume.pdf"; // placeholder: drop the real file into /public
+export const RESUME_URL = "/resume.pdf"; // served from /public; replace public/resume.pdf to update
 
 /* ---------------------------------- Audiences --------------------------------- */
 
