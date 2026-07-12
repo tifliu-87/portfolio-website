@@ -38,9 +38,9 @@ export function ProjectPage({ project }: { project: Project }) {
         </dl>
       ) : (
         <p className="pp-pending">
-          The full case study is in progress.{" "}
-          <a href={`mailto:${EMAIL}`}>Email me</a> and I will gladly walk you
-          through this one in the meantime.
+          This case study is still being written.{" "}
+          <a href={`mailto:${EMAIL}`}>Email me</a> and I'll gladly walk you
+          through it in the meantime.
         </p>
       )}
     </article>
