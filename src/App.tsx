@@ -6,6 +6,7 @@ import { AiStack } from "./components/AiStack";
 import { ProjectPage } from "./components/ProjectPage";
 import { ThemeSlider } from "./components/ThemeSlider";
 import { FontPicker } from "./components/FontPicker";
+import { CursorField } from "./components/CursorField";
 
 /** Tiny hash router; works on any static host with zero config. */
 function useHashRoute(): string {
@@ -52,6 +53,7 @@ export default function App() {
       </div>
       <ThemeSlider />
       <FontPicker />
+      <CursorField />
     </>
   );
 }
