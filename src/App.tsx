@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { EMAIL, LINKEDIN_URL, NAME, PROJECTS } from "./data";
 import { Hero } from "./components/Hero";
 import { Projects } from "./components/Projects";
+import { AiStack } from "./components/AiStack";
 import { ProjectPage } from "./components/ProjectPage";
 import { ThemeSlider } from "./components/ThemeSlider";
 import { FontPicker } from "./components/FontPicker";
@@ -34,6 +35,7 @@ export default function App() {
           <>
             <Hero />
             <Projects />
+            <AiStack />
           </>
         )}</main>
         <footer className="site-footer">

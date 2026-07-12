@@ -110,6 +110,25 @@ contact: ${EMAIL}
 note: "Hello, fellow reader of structured text. The other three tabs
        are for the humans; this one is for you. Index kindly."`;
 
+/* ---------------------------------- AI stack ----------------------------------- */
+
+/** Rendered as the "Fluent in AI" section. Prune to tools actually in rotation. */
+export interface AiStackRow {
+  label: string;
+  tools: string[];
+}
+
+export const AI_LEDE =
+  "AI isn't just a domain I ship in; it's how I work. In daily rotation:";
+
+export const AI_STACK: AiStackRow[] = [
+  { label: "Build", tools: ["Claude Code", "Cursor", "Lovable", "v0"] },
+  { label: "Design", tools: ["Claude Design", "Figma Make"] },
+  { label: "Orchestrate", tools: ["Claude Cowork", "Claude MCP"] },
+  { label: "Research", tools: ["ChatGPT", "Perplexity", "NotebookLM"] },
+  { label: "Everyday", tools: ["Granola", "Wispr Flow", "Gamma", "Notion AI"] },
+];
+
 /* --------------------------- Hidden words (hero reveal) ------------------------ */
 
 /**

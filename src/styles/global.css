@@ -450,6 +450,48 @@ h3 {
   color: var(--accent);
 }
 
+/* --------------------------------- Fluent in AI -------------------------------- */
+
+/* A quiet spec-sheet: caps labels organizing plain rows of tool names. */
+.ai {
+  padding-block: 0 clamp(3.5rem, 9vh, 6rem);
+}
+
+.ai-lede {
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  max-width: 34rem;
+  margin-bottom: clamp(1.25rem, 3vh, 1.75rem);
+}
+
+.ai-rows {
+  display: grid;
+  gap: 0.9rem;
+  max-width: 40rem;
+}
+
+.ai-rows > div {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.ai-rows dt {
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.ai-rows dd {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--ink-muted);
+}
+
 /* -------------------------------- Project page --------------------------------- */
 
 .project-page {
