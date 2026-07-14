@@ -23,11 +23,7 @@ export function ThemeSlider() {
   const handleRef = useRef<HTMLDivElement>(null);
   const raf = useRef(0);
   const dragging = useRef(false);
-  const peekTimer = useRef<number | undefined>(undefined);
   const [stop, setStop] = useState(Math.round(getThemeValue()));
-  // While interacting, the rail label reads the nearest stop's name; it
-  // settles back to "shade" shortly after the theme stops moving.
-  const [peeking, setPeeking] = useState(false);
 
   const positionHandle = useCallback(() => {
     const span = spanRef.current;
@@ -37,21 +33,14 @@ export function ThemeSlider() {
     handle.style.transform = `translateY(${y}px)`;
   }, []);
 
-  const peek = useCallback(() => {
-    setPeeking(true);
-    window.clearTimeout(peekTimer.current);
-    peekTimer.current = window.setTimeout(() => setPeeking(false), 1200);
-  }, []);
-
   const commit = useCallback(
     (v: number) => {
       const clamped = clamp(v, 0, MAX_THEME_VALUE);
       setThemeValue(clamped);
       setStop(Math.round(clamped));
       positionHandle();
-      peek();
     },
-    [positionHandle, peek],
+    [positionHandle],
   );
 
   const cancelAnim = useCallback(() => cancelAnimationFrame(raf.current), []);
@@ -119,7 +108,6 @@ export function ThemeSlider() {
     return () => {
       ro.disconnect();
       cancelAnimationFrame(raf.current);
-      window.clearTimeout(peekTimer.current);
     };
   }, [positionHandle, narrow]);
 
@@ -150,7 +138,7 @@ export function ThemeSlider() {
   return (
     <div className="theme-slider">
       <span className="swatch-label" aria-hidden="true">
-        {peeking ? THEME_STOPS[stop].name.toLowerCase() : "shade"}
+        {THEME_STOPS[stop].name.toLowerCase()}
       </span>
       <div
         className="slider-track"
