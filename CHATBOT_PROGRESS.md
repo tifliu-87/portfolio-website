@@ -4,17 +4,25 @@ Working doc so this task can be resumed mid-flight. Update the checklist as step
 
 ## Decisions made (do not re-litigate on resume)
 
-- **Placement**: inline section (`#ask`) on the homepage between Projects and AiStack,
-  plus an "Ask" link in the site header. NOT a floating bubble widget; DESIGN.md
-  explicitly rejects support-widget chrome, and the flat/tonal design language
-  calls for an in-flow panel.
+- **Placement** (revised 2026-07-13, per Tiffany): a drawer sliding in from the
+  right edge over a light scrim, NOT an in-flow section and NOT a floating
+  bubble widget. Two entry points: an "ask me anything" pill under the hero
+  name, and an "Ask" button in the site header. The drawer stays mounted after
+  first open so closing never loses the conversation.
 - **Engine**: local retrieval over a structured knowledge base (no backend exists;
   the site is a static Vite build). A `ChatProvider` interface abstracts generation
   so an Anthropic/OpenAI provider can be dropped in later without refactoring.
   The system prompt for that future API lives in `src/chat/systemPrompt.ts` now.
-- **Voice**: assistant answers in first person as Tiffany (matches the suggested
-  prompts, e.g. "Tell me about YOUR experience at Beacons AI"). Welcome message
-  is the third-person one from the spec.
+- **Voice** (revised 2026-07-13, per Tiffany): casual and friendly, never
+  "AI assistant" framing. There is no welcome message bubble; the empty state
+  is a bare "Hey! Ask me anything :)" greeting (no emoji). Small-talk and
+  fallback replies are written like texting a friend.
+- **Chips** (revised 2026-07-13, per Tiffany): exactly 3 at a time, persistent
+  above the composer, rotating to a fresh trio from the 10-prompt pool after
+  every question.
+- **Composer** (revised 2026-07-13, per Tiffany): a bordered rounded input box
+  in the familiar chat-app shape (like Claude's), nearly untinted, with a
+  filled circular send button.
 - **Copy rules honored**: no em-dashes anywhere, no years-of-experience claims,
   product-first positioning, concise chunked answers.
 - **Design**: tokens from global.css only (var(--ease), three durations, tonal
@@ -34,15 +42,16 @@ Working doc so this task can be resumed mid-flight. Update the checklist as step
 | `src/chat/systemPrompt.ts` | System prompt for future hosted-LLM providers |
 | `src/chat/engine.ts` | Provider interface + local retrieval provider |
 | `src/chat/useChat.ts` | Chat state machine hook (send, retry, streaming reveal) |
-| `src/components/chat/ChatWindow.tsx` | Section wrapper, empty state, message list |
+| `src/components/chat/ChatDrawer.tsx` | The drawer: scrim, header, log, chips, composer |
 | `src/components/chat/MessageBubble.tsx` | One message |
 | `src/components/chat/TypingIndicator.tsx` | Three-dot thinking pulse |
-| `src/components/chat/PromptChips.tsx` | Suggested prompts (pre-conversation) |
-| `src/components/chat/ChatInput.tsx` | Textarea + send; Enter/Shift+Enter |
+| `src/components/chat/PromptChips.tsx` | The 3 rotating suggestion chips |
+| `src/components/chat/ChatInput.tsx` | Bordered composer box; Enter/Shift+Enter |
 | `src/components/chat/Avatar.tsx` | Small accent-dot avatar |
-| `src/styles/global.css` | Chat styles appended under "Ask" comment banner |
-| `src/App.tsx` | Lazy-mounts ChatWindow between Projects and AiStack |
-| `src/components/SiteHeader.tsx` | "Ask" nav link |
+| `src/styles/global.css` | Chat styles under the "Ask (chat drawer)" banner |
+| `src/App.tsx` | Owns open state; lazy-mounts ChatDrawer on first open |
+| `src/components/SiteHeader.tsx` | "Ask" button entry point |
+| `src/components/Hero.tsx` | "ask me anything" pill entry point under the name |
 
 ## Checklist
 
@@ -62,6 +71,23 @@ Working doc so this task can be resumed mid-flight. Update the checklist as step
       has no overflow
 - [x] Final pass: no em-dashes in src (grepped), accessibility (role=log,
       aria-live, labels, focus ring), docs
+
+## Redesign pass (2026-07-13, requested by Tiffany)
+
+- In-page `#ask` section replaced by a right-edge drawer (`ChatDrawer.tsx`;
+  `ChatWindow.tsx` deleted). Escape, scrim click, and the header × all close
+  it; body scroll locks while open; conversation survives close/reopen.
+- Entry points: hero pill under the name + header "Ask" button (was an anchor).
+- Welcome bubble and wave emoji removed; empty state is a centered
+  "Hey! Ask me anything :)". No "Tiffany's AI assistant" framing anywhere.
+- Chips cut to 3 visible, persistent, rotating through the pool per question.
+- Composer restyled as a bordered rounded box with a filled send button;
+  tint reduced throughout (plain --bg drawer, softer user bubbles).
+- Copy casualized: fallback, greeting/thanks/bye, retry, exhausted-topic
+  replies, and the hosted-LLM system prompt's voice section.
+- Verified in preview: both entry points, chip rotation, "tell me more"
+  follow-up, close/reopen persistence, mobile full-width drawer, no console
+  errors; typecheck + build pass.
 
 ## Status: COMPLETE (2026-07-13)
 
