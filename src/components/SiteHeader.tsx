@@ -1,8 +1,14 @@
 import { useEffect, useState, type MouseEvent } from "react";
 import { EMAIL, NAME, RESUME_URL } from "../data";
+import { SparkleIcon } from "./SparkleIcon";
 
 /** Scroll depth (px) past which the header slides in. */
 const SHOW_AT = 320;
+
+interface SiteHeaderProps {
+  /** Opens the chat drawer (the "Ask" item). */
+  onOpenChat: () => void;
+}
 
 /**
  * Site header: absent while the hero is on screen, sliding in once the
@@ -18,7 +24,7 @@ function scrollToId(id: string, tries = 12) {
   else if (tries > 0) requestAnimationFrame(() => scrollToId(id, tries - 1));
 }
 
-export function SiteHeader() {
+export function SiteHeader({ onOpenChat }: SiteHeaderProps) {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
@@ -58,13 +64,16 @@ export function SiteHeader() {
           <a className="sh-ai" href="#ai" onClick={jump("ai")}>
             Fluent in AI
           </a>
-          <a href="#ask" onClick={jump("ask")}>
-            Ask
-          </a>
           <a href={RESUME_URL} target="_blank" rel="noreferrer">
             Resume
           </a>
           <a href={`mailto:${EMAIL}`}>Email</a>
+          {/* Chat entry point, pinned to the corner as the nav's last item;
+              same pill as the one under the hero name. */}
+          <button type="button" className="ask-pill" onClick={onOpenChat}>
+            <SparkleIcon />
+            Ask
+          </button>
         </nav>
       </div>
     </header>

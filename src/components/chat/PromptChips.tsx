@@ -1,19 +1,25 @@
 import { memo } from "react";
-import { SUGGESTED_PROMPTS } from "../../chat/knowledge";
 
 interface PromptChipsProps {
+  /** The three prompts currently on rotation (see ChatDrawer). */
+  prompts: string[];
   onPick: (prompt: string) => void;
   disabled?: boolean;
 }
 
 /**
- * Clickable starting points, shown only before the conversation begins.
- * Plain bordered pills in the site's quiet register; accent arrives on hover.
+ * Clickable starting points, persistent above the composer; the drawer
+ * rotates in a fresh trio after every question. Plain bordered pills in the
+ * site's quiet register; accent arrives on hover.
  */
-export const PromptChips = memo(function PromptChips({ onPick, disabled }: PromptChipsProps) {
+export const PromptChips = memo(function PromptChips({
+  prompts,
+  onPick,
+  disabled,
+}: PromptChipsProps) {
   return (
     <div className="chat-chips" role="list" aria-label="Suggested questions">
-      {SUGGESTED_PROMPTS.map((prompt) => (
+      {prompts.map((prompt) => (
         <button
           key={prompt}
           type="button"

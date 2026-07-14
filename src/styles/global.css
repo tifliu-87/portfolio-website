@@ -167,18 +167,21 @@ h3 {
 
 .sh-nav {
   display: flex;
+  align-items: center;
   gap: clamp(0.9rem, 2.5vw, 1.5rem);
   font-size: 0.78rem;
 }
 
-.sh-nav a {
+.sh-nav a,
+.sh-nav button {
   color: var(--ink-muted);
   text-decoration: none;
   white-space: nowrap;
   transition: color var(--dur-micro) var(--ease);
 }
 
-.sh-nav a:hover {
+.sh-nav a:hover,
+.sh-nav button:hover {
   color: var(--accent);
 }
 
@@ -299,6 +302,44 @@ h3 {
   margin-top: 0.4rem;
   color: var(--ink-muted);
   font-size: 0.78rem;
+}
+
+/* Chat entry points (under the hero name, in the header corner): a quiet
+   pill led by an accent sparkle, the site's shorthand for "AI lives here". */
+.ask-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.32rem 0.85rem;
+  transition:
+    color var(--dur-micro) var(--ease),
+    border-color var(--dur-micro) var(--ease),
+    background-color var(--dur-micro) var(--ease);
+}
+
+.ask-pill:hover {
+  color: var(--accent);
+  border-color: color-mix(in oklab, var(--accent) 35%, var(--line));
+  background: color-mix(in oklab, var(--accent-soft) 40%, transparent);
+}
+
+.ask-sparkle {
+  flex: none;
+  color: var(--accent);
+  transition: color var(--dur-large) var(--ease);
+}
+
+.hero-ask {
+  margin-top: 0.85rem;
+}
+
+/* In the header row the pill sits tighter so the bar barely grows. */
+.sh-nav .ask-pill {
+  padding-block: 0.22rem;
 }
 
 .hero-links {
@@ -1009,36 +1050,67 @@ h3 {
   color: var(--accent);
 }
 
-/* ------------------------------- Ask (assistant) -------------------------------- */
+/* ------------------------------- Ask (chat drawer) -------------------------------- */
 
-/* An in-flow chat panel in the site's register: tonal surface, no chrome,
-   accent reserved for the avatar, links, and the send affordance. */
-.ask {
-  padding-block: 0 clamp(3.5rem, 9vh, 6rem);
+/* The chat lives in a drawer sliding in from the right edge over a light
+   scrim. Kept nearly untinted (plain background, hairlines); accent is
+   reserved for the avatar, links, chips on hover, and the send button. */
+.chat-root {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
 }
 
-.chat-panel {
-  max-width: 44rem;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: color-mix(in oklab, var(--surface) 55%, var(--bg));
-  padding: clamp(1rem, 2.5vw, 1.5rem);
-  transition: background-color var(--dur-large) var(--ease);
+.chat-root.open {
+  pointer-events: auto;
 }
 
-.chat-log {
-  max-height: min(24rem, 55vh);
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--line) transparent;
+.chat-scrim {
+  position: absolute;
+  inset: 0;
+  background: hsl(340 20% 20% / 0.16);
+  opacity: 0;
+  transition: opacity var(--dur-small) var(--ease);
+}
+
+.chat-root.open .chat-scrim {
+  opacity: 1;
+}
+
+.chat-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(26rem, 100%);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding-bottom: 0.25rem;
+  background: var(--bg);
+  border-left: 1px solid var(--line);
+  transform: translateX(100%);
+  transition:
+    transform var(--dur-small) var(--ease),
+    background-color var(--dur-large) var(--ease);
 }
 
-/* Empty-state hello, above the welcome message. */
-.chat-hello {
+.chat-root.open .chat-drawer {
+  transform: none;
+}
+
+.chat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.chat-head-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
   font-family: var(--font-display);
   font-weight: var(--display-weight);
   letter-spacing: var(--display-tracking);
@@ -1046,23 +1118,55 @@ h3 {
   font-size: 0.95rem;
 }
 
-.chat-wave {
-  display: inline-block;
-  animation: chatWave 900ms var(--ease) 400ms 1 both;
-  transform-origin: 70% 75%;
+.chat-close {
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  color: var(--ink-muted);
+  transition:
+    color var(--dur-micro) var(--ease),
+    background-color var(--dur-micro) var(--ease);
 }
 
-@keyframes chatWave {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-  30% {
-    transform: rotate(16deg);
-  }
-  60% {
-    transform: rotate(-8deg);
-  }
+.chat-close:hover {
+  color: var(--ink);
+  background: var(--surface);
+}
+
+.chat-log {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.1rem;
+}
+
+/* Empty-state greeting, centered in the space the conversation will fill. */
+.chat-hello {
+  margin: auto;
+  text-align: center;
+  max-width: 30ch;
+}
+
+.chat-hello-title {
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--display-tracking);
+  font-variation-settings: var(--display-variation);
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  color: var(--ink);
+}
+
+.chat-hello-sub {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--ink-muted);
 }
 
 /* One message row; assistant rows carry the avatar mark. */
@@ -1131,7 +1235,7 @@ h3 {
 }
 
 .chat-row.is-user .chat-bubble {
-  background: var(--surface);
+  background: color-mix(in oklab, var(--surface) 60%, var(--bg));
   border-radius: 12px;
   padding: 0.45rem 0.8rem;
   color: var(--ink);
@@ -1192,12 +1296,17 @@ h3 {
   }
 }
 
+/* Chips + composer, pinned under the log. */
+.chat-foot {
+  padding: 0 1.1rem 1.1rem;
+}
+
 /* Suggested prompts: quiet bordered pills; accent arrives on hover. */
 .chat-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  gap: 0.4rem;
+  margin-bottom: 0.65rem;
 }
 
 .chat-chip {
@@ -1223,14 +1332,24 @@ h3 {
   cursor: default;
 }
 
-/* The composer: bare textarea over a hairline, arrow send at the end. */
+/* The composer: a bordered rounded box in the familiar chat-app shape,
+   untinted, with the textarea inside and a filled send button at the end. */
 .chat-input {
   display: flex;
   align-items: flex-end;
   gap: 0.6rem;
-  margin-top: 1rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid var(--line);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--bg);
+  padding: 0.5rem 0.5rem 0.5rem 0.9rem;
+  transition:
+    border-color var(--dur-micro) var(--ease),
+    background-color var(--dur-large) var(--ease);
+}
+
+/* The box border is the field; focus quietly warms it toward accent. */
+.chat-input:focus-within {
+  border-color: color-mix(in oklab, var(--accent) 45%, var(--line));
 }
 
 .chat-input textarea {
@@ -1241,19 +1360,13 @@ h3 {
   color: var(--ink);
   background: none;
   border: 0;
-  padding: 0.25rem 0;
+  padding: 0.3rem 0;
   resize: none;
   min-height: 1.55em;
 }
 
 .chat-input textarea:focus {
   outline: none;
-}
-
-/* The textarea forgoes its own ring (the panel hairline reads as the field),
-   but keyboard focus still gets the site-standard ring on the whole composer. */
-.chat-input:focus-within {
-  border-top-color: color-mix(in oklab, var(--accent) 45%, var(--line));
 }
 
 .chat-input textarea::placeholder {
@@ -1269,10 +1382,11 @@ h3 {
   flex: none;
   width: 1.9rem;
   height: 1.9rem;
-  border-radius: 50%;
+  border-radius: 999px;
   display: grid;
   place-items: center;
-  color: var(--accent);
+  color: var(--accent-ink);
+  background: var(--accent);
   transition:
     background-color var(--dur-micro) var(--ease),
     color var(--dur-micro) var(--ease),
@@ -1280,19 +1394,14 @@ h3 {
 }
 
 .chat-send:hover:not(:disabled) {
-  background: color-mix(in oklab, var(--accent-soft) 75%, transparent);
+  background: color-mix(in oklab, var(--accent) 85%, var(--ink));
 }
 
 .chat-send:disabled {
+  background: var(--surface);
   color: var(--ink-muted);
-  opacity: 0.45;
+  opacity: 0.7;
   cursor: default;
-}
-
-@media (max-width: 480px) {
-  .chat-log {
-    max-height: 60vh;
-  }
 }
 
 /* ------------------------------- Reduced motion -------------------------------- */

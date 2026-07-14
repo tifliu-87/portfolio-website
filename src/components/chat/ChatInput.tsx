@@ -11,8 +11,9 @@ interface ChatInputProps {
 const MAX_ROWS = 6;
 
 /**
- * The composer: an auto-growing textarea (Enter sends, Shift+Enter breaks)
- * with a plain arrow send button. Grows to six lines, then scrolls.
+ * The composer: a bordered rounded box in the familiar chat-app shape, with
+ * an auto-growing textarea (Enter sends, Shift+Enter breaks) and a filled
+ * arrow send button. Grows to six lines, then scrolls.
  */
 export function ChatInput({ onSend, busy, focusToken }: ChatInputProps) {
   const [value, setValue] = useState("");
@@ -57,8 +58,8 @@ export function ChatInput({ onSend, busy, focusToken }: ChatInputProps) {
         ref={areaRef}
         rows={1}
         value={value}
-        placeholder="Ask about my work, process, or plans"
-        aria-label="Ask the assistant a question"
+        placeholder="Ask me anything"
+        aria-label="Ask a question"
         disabled={busy}
         onChange={(e) => {
           setValue(e.target.value);

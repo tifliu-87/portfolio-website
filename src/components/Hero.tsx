@@ -14,6 +14,7 @@ import {
   type PhraseKey,
 } from "../data";
 import { useCoarsePointer, usePrefersReducedMotion } from "../hooks";
+import { SparkleIcon } from "./SparkleIcon";
 
 /**
  * Hero: the framed content box (audience tabs + intro sentence on the left,
@@ -54,7 +55,12 @@ function Wonky({ text }: { text: string }) {
   );
 }
 
-export function Hero() {
+interface HeroProps {
+  /** Opens the chat drawer (the pill under the name). */
+  onOpenChat: () => void;
+}
+
+export function Hero({ onOpenChat }: HeroProps) {
   const [audience, setAudience] = useState<AudienceId>("everyone");
   const [active, setActive] = useState<PhraseKey | null>(null);
   const [shown, setShown] = useState<PhraseKey>("pm");
@@ -401,6 +407,10 @@ export function Hero() {
               </p>
             </div>
             <p className="hero-role">product manager · builder</p>
+            <button type="button" className="ask-pill hero-ask" onClick={onOpenChat}>
+              <SparkleIcon />
+              ask me anything
+            </button>
             <div className="hero-links">
               <a href={LINKEDIN_URL} target="_blank" rel="noreferrer">
                 LinkedIn

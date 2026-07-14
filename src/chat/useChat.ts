@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "../hooks";
 import { defaultProvider } from "./engine";
-import { WELCOME_MESSAGE } from "./knowledge";
 import type { ChatMessage, ChatProvider, ChatStatus, ProviderMessage } from "./types";
 
-const RETRY_MESSAGE = `Hm, something went wrong on my end. Mind trying that again?`;
+const RETRY_MESSAGE = `Oof, something glitched on my end. Mind giving that another shot?`;
 
 /** Feels considered without feeling slow. */
 const THINK_MS_MIN = 450;
@@ -41,17 +40,14 @@ export interface UseChatResult {
  * hosted provider needs no streaming support to keep the same feel.
  */
 export function useChat(provider: ChatProvider = defaultProvider): UseChatResult {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { id: makeId(), role: "assistant", text: WELCOME_MESSAGE },
-  ]);
+  // Starts empty: the drawer's greeting is UI chrome, not a message.
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [status, setStatus] = useState<ChatStatus>("idle");
   const [hasConversed, setHasConversed] = useState(false);
   const reducedMotion = usePrefersReducedMotion();
 
-  // History as the provider sees it (welcome message included for context).
-  const historyRef = useRef<ProviderMessage[]>([
-    { role: "assistant", content: WELCOME_MESSAGE },
-  ]);
+  // History as the provider sees it.
+  const historyRef = useRef<ProviderMessage[]>([]);
   const lastUserTextRef = useRef<string>("");
   const abortRef = useRef<AbortController | null>(null);
 

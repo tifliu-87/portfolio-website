@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { EMAIL, LINKEDIN_URL, NAME, PROJECTS } from "./data";
 import { Hero } from "./components/Hero";
 import { Projects } from "./components/Projects";
@@ -9,9 +9,10 @@ import { FontPicker } from "./components/FontPicker";
 import { CursorField } from "./components/CursorField";
 import { SiteHeader } from "./components/SiteHeader";
 
-// The assistant is below the fold and self-contained; loading it lazily keeps
-// it (and its knowledge base) out of the initial bundle.
-const ChatWindow = lazy(() => import("./components/chat/ChatWindow"));
+// The chat drawer loads lazily on first open, keeping it (and its knowledge
+// base) out of the initial bundle; it stays mounted afterwards so closing
+// never discards the conversation.
+const ChatDrawer = lazy(() => import("./components/chat/ChatDrawer"));
 
 /** Tiny hash router; works on any static host with zero config. */
 function useHashRoute(): string {
@@ -36,17 +37,24 @@ export default function App() {
     return m ? PROJECTS.find((p) => p.id === m[1]) : undefined;
   }, [hash]);
 
+  // The drawer mounts on first open and stays mounted (chatMounted never
+  // flips back), so reopening restores the conversation where it left off.
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatMounted, setChatMounted] = useState(false);
+  const openChat = useCallback(() => {
+    setChatMounted(true);
+    setChatOpen(true);
+  }, []);
+  const closeChat = useCallback(() => setChatOpen(false), []);
+
   return (
     <>
-      <SiteHeader />
+      <SiteHeader onOpenChat={openChat} />
       <div className="page">
         <main>{project ? <ProjectPage project={project} /> : (
           <>
-            <Hero />
+            <Hero onOpenChat={openChat} />
             <Projects />
-            <Suspense fallback={null}>
-              <ChatWindow />
-            </Suspense>
             <AiStack />
           </>
         )}</main>
@@ -65,6 +73,11 @@ export default function App() {
       <ThemeSlider />
       <FontPicker />
       <CursorField />
+      {chatMounted && (
+        <Suspense fallback={null}>
+          <ChatDrawer open={chatOpen} onClose={closeChat} />
+        </Suspense>
+      )}
     </>
   );
 }
