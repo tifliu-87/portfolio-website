@@ -246,8 +246,8 @@ h3 {
 
 /* Icon row above the name (GitHub, LinkedIn, email): the row keeps its height
    at rest so revealing it never shifts the layout; icons pop in with a small
-   stagger when the name is hovered or focused. Touch has no hover, so there
-   they are simply visible. */
+   stagger when either text column of the hero is hovered, or the name block
+   is focused. Touch has no hover, so there they are simply visible. */
 .id-icons {
   display: flex;
   justify-content: flex-end;
@@ -273,7 +273,8 @@ h3 {
   display: block;
 }
 
-.hero-name-block:hover .id-icons a,
+.hero-main:hover ~ .hero-id .id-icons a,
+.hero-id:hover .id-icons a,
 .hero-name-block:focus-within .id-icons a {
   opacity: 1;
   transform: none;
