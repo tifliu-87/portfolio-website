@@ -58,6 +58,9 @@ export function SiteHeader() {
           <a className="sh-ai" href="#ai" onClick={jump("ai")}>
             Fluent in AI
           </a>
+          <a href="#ask" onClick={jump("ask")}>
+            Ask
+          </a>
           <a href={RESUME_URL} target="_blank" rel="noreferrer">
             Resume
           </a>

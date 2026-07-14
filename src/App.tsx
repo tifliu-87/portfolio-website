@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { EMAIL, LINKEDIN_URL, NAME, PROJECTS } from "./data";
 import { Hero } from "./components/Hero";
 import { Projects } from "./components/Projects";
@@ -8,6 +8,10 @@ import { ThemeSlider } from "./components/ThemeSlider";
 import { FontPicker } from "./components/FontPicker";
 import { CursorField } from "./components/CursorField";
 import { SiteHeader } from "./components/SiteHeader";
+
+// The assistant is below the fold and self-contained; loading it lazily keeps
+// it (and its knowledge base) out of the initial bundle.
+const ChatWindow = lazy(() => import("./components/chat/ChatWindow"));
 
 /** Tiny hash router; works on any static host with zero config. */
 function useHashRoute(): string {
@@ -40,6 +44,9 @@ export default function App() {
           <>
             <Hero />
             <Projects />
+            <Suspense fallback={null}>
+              <ChatWindow />
+            </Suspense>
             <AiStack />
           </>
         )}</main>
