@@ -77,22 +77,42 @@ const GREETING_RE = /^\s*(hi|hey|hello|howdy|yo|hiya|good (morning|afternoon|eve
 const THANKS_RE = /\b(thanks|thank you|thx|appreciate)\b/i;
 const BYE_RE = /^\s*(bye|goodbye|see you|later|cya|take care)[\s!,.?]*$/i;
 
-const GREETING_REPLY = `Hi! Great to meet you.
+const GREETING_REPLY = `Hey! Good to meet you.
 
-Ask me anything about my experience, projects, design process, or what I'm looking for next. The chips below are good starting points if you'd like one.`;
+Ask me whatever you're curious about: my work, my projects, how I think about design, what I'm looking for. Or grab one of the suggestions below.`;
 
-const THANKS_REPLY = `You're welcome! Happy to keep going if anything else comes to mind.
+const THANKS_REPLY = `Anytime! If anything else pops into your head, I'm right here.
 
-And if you'd rather talk to the real Tiffany, her email is one question away.`;
+And if you'd rather talk to the actual human version of me, just ask for my email.`;
 
-const BYE_REPLY = `Thanks for stopping by! Feel free to explore the case studies below, and don't be a stranger.`;
+const BYE_REPLY = `See you around! Go poke through the case studies if you haven't yet. Thanks for stopping by :)`;
 
 /* ------------------------------ Topic tracking ------------------------------ */
 
-const titleFor = (id: string): string => {
-  const entry = KNOWLEDGE.find((e) => e.id === id);
-  return entry ? entry.section.toLowerCase() + ": " + entry.id.replace(/-/g, " ") : id;
+/** Casual, sentence-ready names for topics ("Want to hear about ...?"). */
+const TOPIC_TITLES: Record<string, string> = {
+  about: "a quick intro",
+  education: "school",
+  beacons: "my time at Beacons",
+  coldreach: "Coldreach",
+  nava: "NAVA, the startup I co-founded",
+  jila: "Jila",
+  anda: "Anda",
+  cubec: "my consulting work",
+  leadership: "leadership stuff",
+  technical: "what I build with",
+  "ai-fluency": "how I use AI",
+  "design-process": "how I design",
+  "pm-philosophy": "how I think about product",
+  problems: "the kinds of problems I love",
+  favorite: "my favorite projects",
+  impact: "the numbers behind my work",
+  "looking-for": "what I'm looking for next",
+  "off-resume": "something that's not on my resume",
+  contact: "how to reach me",
 };
+
+const titleFor = (id: string): string => TOPIC_TITLES[id] ?? id.replace(/-/g, " ");
 
 /**
  * Replays the conversation to rebuild topic state (which entry is active and
@@ -130,8 +150,8 @@ function exhaustedReply(entry: KnowledgeEntry): string {
     .slice(0, 2)
     .join(" or ");
   return suggestions
-    ? `That's most of what I can share on that one here. Related things I can speak to: ${suggestions}. Or ask me anything else!`
-    : `That's most of what I can share on that one here, but I'm happy to talk about anything else.`;
+    ? `Honestly, that's about everything I've got on that one here. Want to hear about ${suggestions}? Or throw me something totally different.`
+    : `Honestly, that's about everything I've got on that one here, but ask me anything else!`;
 }
 
 /* --------------------------------- Provider --------------------------------- */

@@ -11,26 +11,27 @@ import type { KnowledgeEntry } from "./types";
  * existing one) with generous keywords. No other file needs to change.
  */
 
-export const WELCOME_MESSAGE = `Hi! I'm Tiffany's AI assistant.
-
-Feel free to ask me anything about her projects, experience, design philosophy, internships, leadership, or technical background.`;
-
+/**
+ * Rotating pool for the suggested-prompt chips. The drawer shows three at a
+ * time and advances through this list after every question, wrapping around.
+ * Every prompt here must reliably hit a KNOWLEDGE entry's keywords.
+ */
 export const SUGGESTED_PROMPTS: string[] = [
-  "Tell me about your experience at Beacons AI",
+  "What did you do at Beacons AI?",
   "What's your favorite project?",
   "What kinds of product problems do you enjoy?",
   "Tell me about your design process",
   "Why product management?",
-  "Show me your leadership experience",
+  "What's your leadership experience?",
   "What impact have you made?",
-  "What technologies do you use?",
-  "What are you currently looking for?",
+  "What do you build with?",
+  "What are you looking for next?",
   "Tell me something that's not on your resume",
 ];
 
-export const FALLBACK_ANSWER = `I'm not sure about that one, honestly. I'd rather say so than make something up.
+export const FALLBACK_ANSWER = `Ooh, you got me. I honestly don't know that one, and I'd rather admit it than make something up.
 
-Try asking about my internships at Beacons AI or Coldreach, my projects, my design process, or what I'm looking for next. Or reach me directly at ${EMAIL}.`;
+Things I can actually talk about: my internships at Beacons AI and Coldreach, my projects, how I design, or what I'm looking for next. Or just email me at ${EMAIL}.`;
 
 export const KNOWLEDGE: KnowledgeEntry[] = [
   {
