@@ -23,8 +23,16 @@ export interface FontOption {
 export const FONT_OPTIONS: FontOption[] = [
   // First option is the site default; global.css :root defaults must match.
   {
+    id: "newsreader",
+    label: "Newsreader (default)",
+    display: '"Newsreader Variable", Georgia, serif',
+    displayWeight: "470",
+    tracking: "-0.005em",
+    body: INTER,
+  },
+  {
     id: "fraunces",
-    label: "Fraunces (default)",
+    label: "Fraunces",
     display: '"Fraunces Variable", Georgia, serif',
     displayWeight: "560",
     tracking: "-0.01em",
@@ -38,22 +46,6 @@ export const FONT_OPTIONS: FontOption[] = [
     tracking: "-0.005em",
     body: INTER,
     variation: '"opsz" 144',
-  },
-  {
-    id: "newsreader",
-    label: "Newsreader",
-    display: '"Newsreader Variable", Georgia, serif',
-    displayWeight: "470",
-    tracking: "-0.005em",
-    body: INTER,
-  },
-  {
-    id: "instrument",
-    label: "Instrument Serif",
-    display: '"Instrument Serif", Georgia, serif',
-    displayWeight: "400",
-    tracking: "0em",
-    body: INTER,
   },
   {
     id: "space",

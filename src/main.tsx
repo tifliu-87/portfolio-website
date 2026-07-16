@@ -6,7 +6,6 @@ import "@fontsource-variable/inter/index.css";
 import "@fontsource-variable/fraunces/full.css";
 // Font-tester candidates (remove the unused ones once a font is chosen):
 import "@fontsource-variable/newsreader/index.css";
-import "@fontsource/instrument-serif/index.css";
 import "@fontsource-variable/space-grotesk/index.css";
 import "@fontsource-variable/outfit/index.css";
 import "./styles/global.css";

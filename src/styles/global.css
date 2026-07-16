@@ -11,10 +11,10 @@
   --dur-small: 420ms;  /* inline expansions, card hovers */
   --dur-large: 750ms;  /* section transitions, theme shifts */
 
-  /* Defaults match the "Fraunces (default)" option in src/fonts.ts */
-  --font-display: "Fraunces Variable", "Iowan Old Style", Georgia, serif;
-  --display-weight: 560;
-  --display-tracking: -0.01em;
+  /* Defaults match the "Newsreader (default)" option in src/fonts.ts */
+  --font-display: "Newsreader Variable", Georgia, serif;
+  --display-weight: 470;
+  --display-tracking: -0.005em;
   --display-variation: normal;
   --font-sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
