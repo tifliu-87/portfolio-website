@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { NAME } from "../../data";
 import { SUGGESTED_PROMPTS } from "../../chat/knowledge";
+import { hostedProvider } from "../../chat/hostedProvider";
 import { useChat } from "../../chat/useChat";
 import { Avatar } from "./Avatar";
 import { ChatInput } from "./ChatInput";
@@ -23,7 +24,7 @@ const CHIP_COUNT = 3;
  * composer and rotate to a fresh trio after every question.
  */
 export default function ChatDrawer({ open, onClose }: ChatDrawerProps) {
-  const { messages, status, hasConversed, send, retry } = useChat();
+  const { messages, status, hasConversed, send, retry } = useChat(hostedProvider);
   const logRef = useRef<HTMLDivElement>(null);
   const [focusToken, setFocusToken] = useState(0);
   const busy = status === "thinking" || status === "streaming";

@@ -3,6 +3,7 @@ dist
 dist-ssr
 *.local
 *.tsbuildinfo
+.vercel
 .DS_Store
 
 # Editor directories and files
