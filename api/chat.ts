@@ -16,8 +16,12 @@ import { buildSystemPrompt } from "../src/chat/systemPrompt.js";
  * FUNCTION_INVOCATION_FAILED on this project.
  */
 
-/** Flash-Lite has the roomiest free-tier rate limits and answers fast. */
-const MODEL = "gemini-2.5-flash-lite";
+/**
+ * Flash-Lite has the roomiest free-tier rate limits and answers fast. The
+ * -latest alias tracks the current generation; pinned names (for example
+ * gemini-2.5-flash-lite) 404 for API keys created after their retirement.
+ */
+const MODEL = "gemini-flash-lite-latest";
 
 /* Keep strangers from burning the free quota with giant payloads. */
 const MAX_MESSAGES = 30;
