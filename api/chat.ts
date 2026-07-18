@@ -1,6 +1,6 @@
-// The .ts extension is required: Vercel runs this natively on Node with
-// type stripping, where ESM imports must carry explicit file extensions.
-import { buildSystemPrompt } from "../src/chat/systemPrompt.ts";
+// The .js extension is required: Vercel compiles each .ts file to .js and
+// resolves imports as strict ESM, so imports must name the compiled file.
+import { buildSystemPrompt } from "../src/chat/systemPrompt.js";
 
 /**
  * Serverless chat endpoint (Vercel). Proxies the conversation to Google's

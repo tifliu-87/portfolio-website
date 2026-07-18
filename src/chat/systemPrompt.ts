@@ -1,7 +1,8 @@
-// Explicit .ts extensions: this file also runs server-side in api/chat.ts
-// under Node's native type stripping, which resolves imports as strict ESM.
-import { EMAIL, NAME } from "../data.ts";
-import { KNOWLEDGE } from "./knowledge.ts";
+// The .js extensions are required: this file also runs server-side via
+// api/chat.ts, where Vercel compiles each .ts to .js and resolves imports
+// as strict ESM. Vite resolves the same imports back to the .ts sources.
+import { EMAIL, NAME } from "../data.js";
+import { KNOWLEDGE } from "./knowledge.js";
 
 /**
  * System prompt for a hosted-LLM provider (Anthropic, OpenAI). Not used by

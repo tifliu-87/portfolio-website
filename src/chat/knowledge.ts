@@ -1,6 +1,7 @@
-// Explicit .ts extension: this file also runs server-side via api/chat.ts
-// under Node's native type stripping, which resolves imports as strict ESM.
-import { EMAIL, LINKEDIN_URL, RESUME_URL } from "../data.ts";
+// The .js extension is required: this file also runs server-side via
+// api/chat.ts, where Vercel compiles each .ts to .js and resolves imports
+// as strict ESM. Vite resolves the same import back to the .ts source.
+import { EMAIL, LINKEDIN_URL, RESUME_URL } from "../data.js";
 import type { KnowledgeEntry } from "./types";
 
 /**
