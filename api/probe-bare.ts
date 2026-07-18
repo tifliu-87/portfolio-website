@@ -1,0 +1,14 @@
+/** Temporary probe: extensionless import from src/. Delete once chat works. */
+import { NAME } from "../src/data";
+
+interface NodeRequest {
+  method?: string;
+}
+interface NodeResponse {
+  status(code: number): NodeResponse;
+  json(body: unknown): void;
+}
+
+export default function handler(_req: NodeRequest, res: NodeResponse): void {
+  res.status(200).json({ style: "bare", name: NAME });
+}
