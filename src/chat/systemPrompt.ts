@@ -1,5 +1,7 @@
-import { EMAIL, NAME } from "../data";
-import { KNOWLEDGE } from "./knowledge";
+// Explicit .ts extensions: this file also runs server-side in api/chat.ts
+// under Node's native type stripping, which resolves imports as strict ESM.
+import { EMAIL, NAME } from "../data.ts";
+import { KNOWLEDGE } from "./knowledge.ts";
 
 /**
  * System prompt for a hosted-LLM provider (Anthropic, OpenAI). Not used by

@@ -1,4 +1,6 @@
-import { EMAIL, LINKEDIN_URL, RESUME_URL } from "../data";
+// Explicit .ts extension: this file also runs server-side via api/chat.ts
+// under Node's native type stripping, which resolves imports as strict ESM.
+import { EMAIL, LINKEDIN_URL, RESUME_URL } from "../data.ts";
 import type { KnowledgeEntry } from "./types";
 
 /**
