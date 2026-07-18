@@ -8,6 +8,10 @@ import { buildSystemPrompt } from "../src/chat/systemPrompt";
  *
  * Free tier: get a key at https://aistudio.google.com/apikey and set it as
  * the GEMINI_API_KEY environment variable in Vercel.
+ *
+ * Uses the classic (req, res) Node handler signature, which every version
+ * of Vercel's builder supports; the newer web-handler style crashed with
+ * FUNCTION_INVOCATION_FAILED on this project.
  */
 
 /** Flash-Lite has the roomiest free-tier rate limits and answers fast. */
@@ -28,11 +32,15 @@ interface GeminiResponse {
   }>;
 }
 
-const json = (body: unknown, status = 200): Response =>
-  new Response(JSON.stringify(body), {
-    status,
-    headers: { "content-type": "application/json" },
-  });
+/* Minimal request/response shapes so we don't need the @vercel/node dep. */
+interface NodeRequest {
+  method?: string;
+  body?: unknown;
+}
+interface NodeResponse {
+  status(code: number): NodeResponse;
+  json(body: unknown): void;
+}
 
 function sanitize(raw: unknown): IncomingMessage[] {
   if (!Array.isArray(raw)) return [];
@@ -49,46 +57,60 @@ function sanitize(raw: unknown): IncomingMessage[] {
     .map((m) => ({ role: m.role, content: m.content.slice(0, MAX_MESSAGE_CHARS) }));
 }
 
-export async function POST(request: Request): Promise<Response> {
+export default async function handler(req: NodeRequest, res: NodeResponse): Promise<void> {
+  if (req.method !== "POST") {
+    res.status(405).json({ error: "POST only." });
+    return;
+  }
+
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) return json({ error: "Chat API is not configured." }, 503);
+  if (!apiKey) {
+    res.status(503).json({ error: "Chat API is not configured." });
+    return;
+  }
 
-  let messages: IncomingMessage[];
   try {
-    const body = (await request.json()) as { messages?: unknown };
-    messages = sanitize(body.messages);
-  } catch {
-    return json({ error: "Malformed request body." }, 400);
-  }
-  if (messages.length === 0 || messages[messages.length - 1].role !== "user") {
-    return json({ error: "Expected a message history ending with the visitor." }, 400);
-  }
+    // Vercel parses JSON bodies; tolerate a raw string just in case.
+    const body =
+      typeof req.body === "string" ? (JSON.parse(req.body) as { messages?: unknown }) : req.body;
+    const messages = sanitize((body as { messages?: unknown } | undefined)?.messages);
+    if (messages.length === 0 || messages[messages.length - 1].role !== "user") {
+      res.status(400).json({ error: "Expected a message history ending with the visitor." });
+      return;
+    }
 
-  const upstream = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,
-    {
-      method: "POST",
-      headers: { "content-type": "application/json", "x-goog-api-key": apiKey },
-      body: JSON.stringify({
-        system_instruction: { parts: [{ text: buildSystemPrompt() }] },
-        contents: messages.map((m) => ({
-          role: m.role === "assistant" ? "model" : "user",
-          parts: [{ text: m.content }],
-        })),
-        generationConfig: { temperature: 0.6, maxOutputTokens: 800 },
-      }),
-    },
-  );
-  if (!upstream.ok) {
-    return json({ error: "Model call failed." }, upstream.status === 429 ? 429 : 502);
+    const upstream = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,
+      {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-goog-api-key": apiKey },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: buildSystemPrompt() }] },
+          contents: messages.map((m) => ({
+            role: m.role === "assistant" ? "model" : "user",
+            parts: [{ text: m.content }],
+          })),
+          generationConfig: { temperature: 0.6, maxOutputTokens: 800 },
+        }),
+      },
+    );
+    if (!upstream.ok) {
+      res.status(upstream.status === 429 ? 429 : 502).json({ error: "Model call failed." });
+      return;
+    }
+
+    const data = (await upstream.json()) as GeminiResponse;
+    const reply = (data.candidates?.[0]?.content?.parts ?? [])
+      .map((part) => part.text ?? "")
+      .join("")
+      .trim();
+    if (!reply) {
+      res.status(502).json({ error: "Model returned no text." });
+      return;
+    }
+
+    res.status(200).json({ reply });
+  } catch (error) {
+    res.status(500).json({ error: error instanceof Error ? error.message : "Unexpected error." });
   }
-
-  const data = (await upstream.json()) as GeminiResponse;
-  const reply = (data.candidates?.[0]?.content?.parts ?? [])
-    .map((part) => part.text ?? "")
-    .join("")
-    .trim();
-  if (!reply) return json({ error: "Model returned no text." }, 502);
-
-  return json({ reply });
 }
