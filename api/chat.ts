@@ -111,6 +111,9 @@ export default async function handler(req: NodeRequest, res: NodeResponse): Prom
     const reply = (data.candidates?.[0]?.content?.parts ?? [])
       .map((part) => part.text ?? "")
       .join("")
+      // The site's copy rule bans em-dashes and the model ignores the
+      // prompt's version of that rule often enough to enforce it here.
+      .replace(/\s*—\s*/g, ", ")
       .trim();
     if (!reply) {
       res.status(502).json({ error: "Model returned no text." });
