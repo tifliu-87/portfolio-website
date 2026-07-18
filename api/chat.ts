@@ -97,7 +97,13 @@ export default async function handler(req: NodeRequest, res: NodeResponse): Prom
       },
     );
     if (!upstream.ok) {
-      res.status(upstream.status === 429 ? 429 : 502).json({ error: "Model call failed." });
+      // Detail is temporary diagnostics while wiring this up; also lands in
+      // the Vercel function logs via console.error.
+      const detail = (await upstream.text()).slice(0, 400);
+      console.error("gemini error", upstream.status, detail);
+      res
+        .status(upstream.status === 429 ? 429 : 502)
+        .json({ error: "Model call failed.", upstream: upstream.status, detail });
       return;
     }
 
