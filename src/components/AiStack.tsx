@@ -21,7 +21,13 @@ export function AiStack() {
         {AI_STACK.map((row, i) => (
           <div key={row.label} className="rv" style={{ "--i": i + 2 } as CSSProperties}>
             <dt>{row.label}</dt>
-            <dd>{row.tools.join(" · ")}</dd>
+            <dd>
+              {row.tools.map((tool) => (
+                <span key={tool} className="ai-chip">
+                  {tool}
+                </span>
+              ))}
+            </dd>
           </div>
         ))}
       </dl>
