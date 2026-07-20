@@ -427,18 +427,26 @@ h3 {
   font: inherit;
   letter-spacing: inherit;
   color: var(--accent);
-  background-color: transparent;
+  background-color: color-mix(in oklab, var(--accent-soft) 32%, transparent);
   border-radius: 0.22em;
-  padding-inline: 0.08em;
+  padding-inline: 0.12em;
   margin-inline: -0.04em;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
-  transition: background-color var(--dur-micro) var(--ease);
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-color: color-mix(in oklab, var(--accent) 45%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition:
+    background-color var(--dur-micro) var(--ease),
+    text-decoration-color var(--dur-micro) var(--ease);
 }
 
 .phrase:hover,
 .phrase.on {
-  background-color: color-mix(in oklab, var(--accent-soft) 75%, transparent);
+  background-color: color-mix(in oklab, var(--accent-soft) 80%, transparent);
+  text-decoration-color: var(--accent);
 }
 
 /* The unfold: grid-template-rows 0fr -> 1fr, pushing content smoothly. */
