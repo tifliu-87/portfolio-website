@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useCoarsePointer, usePrefersReducedMotion } from "../hooks";
 
 /** Stillness before the companion dot dozes off beside the cursor. */
-const IDLE_MS = 1_500;
+const IDLE_MS = 1_000;
 
 /**
  * Two companions for the cursor, site-wide:
