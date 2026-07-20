@@ -60,7 +60,7 @@ export interface HeroCopy {
 export const HERO_COPY: Record<Exclude<AudienceId, "machines">, HeroCopy> = {
   everyone: {
     segments: [
-      { text: "Hi there, I'm a " },
+      { text: "Hey! I'm a " },
       { text: "product manager", phrase: "pm" },
       { text: " with " },
       { text: "sharp product sense", phrase: "messy" },
