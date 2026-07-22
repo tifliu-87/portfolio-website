@@ -72,7 +72,7 @@ export function SiteHeader({ onOpenChat }: SiteHeaderProps) {
               same pill as the one under the hero name. */}
           <button type="button" className="ask-pill" onClick={onOpenChat}>
             <SparkleIcon />
-            Ask
+            ask me anything
           </button>
         </nav>
       </div>
